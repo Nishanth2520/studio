@@ -10,16 +10,14 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Logo } from "@/components/icons/Logo";
 import Chatbot from "@/components/user/Chatbot";
-import { CalendarPlus, MessageCircleQuestion } from 'lucide-react';
+import { CalendarPlus, MessageCircleQuestion, Zap } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function HomePage() {
   const { user, role, loading } = useAuth();
@@ -33,6 +31,8 @@ export default function HomePage() {
         } else if (role === 'user') {
           router.replace('/dashboard');
         } else {
+          // This case should ideally not happen if role is always set on login
+          // For safety, redirect to login if role is unclear but user is authenticated
           console.warn("User authenticated but role is unclear. Redirecting to login.");
           router.replace('/login');
         }
@@ -49,7 +49,9 @@ export default function HomePage() {
     );
   }
 
-  if (user && !loading) { // If user is logged in but redirection hasn't happened yet
+  // If user is logged in but redirection hasn't happened yet (e.g., due to useEffect async nature)
+  // This helps prevent a flash of the public homepage for logged-in users.
+  if (user && !loading) { 
       return (
         <div className="flex min-h-screen items-center justify-center bg-background">
           <LoadingSpinner />
@@ -59,63 +61,92 @@ export default function HomePage() {
 
   // If !user and !loading, render the public homepage
   return (
-    <div className="flex min-h-screen flex-col bg-gradient-to-b from-background to-secondary/30">
+    <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-secondary/10 to-secondary/30">
       <Header />
       <main className="flex-1">
+        {/* Hero Section */}
         <section className="container mx-auto px-4 py-16 sm:py-24 text-center">
           <div className="mb-8 inline-block">
             <Logo size={64} />
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-primary sm:text-5xl md:text-6xl">
+          <h1 className="text-4xl font-extrabold tracking-tight text-primary sm:text-5xl md:text-6xl">
             Welcome to MediConsult AI
           </h1>
           <p className="mt-6 max-w-3xl mx-auto text-lg text-muted-foreground sm:text-xl">
-            Your intelligent health companion. Get insights on symptoms or manage patient interactions, all powered by cutting-edge AI.
+            Your intelligent health companion. Get insights on symptoms or schedule appointments, all powered by cutting-edge AI.
           </p>
         </section>
         
-        <section id="symptom-checker" className="py-16 sm:py-24 bg-background">
-            <div className="container mx-auto px-4 text-center">
-                <h2 className="text-3xl font-bold text-primary mb-8 sm:mb-12">AI Symptom Helper</h2>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size="lg" className="shadow-lg hover:shadow-primary/30 transition-shadow">
-                      <MessageCircleQuestion className="mr-2 h-5 w-5" />
-                      Ask our AI Symptom Helper
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[650px] p-0">
-                    {/* Chatbot component itself is a Card, so DialogContent padding is removed to avoid double padding/borders */}
-                    <Chatbot />
-                  </DialogContent>
-                </Dialog>
-                 <p className="mt-8 text-center text-sm text-muted-foreground">
+        {/* Main Features Section - 2 Column Layout */}
+        <section className="py-12 sm:py-16 bg-background">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center text-primary mb-12 sm:mb-16">Explore Our Services</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+              
+              {/* AI Symptom Helper Card */}
+              <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+                <CardHeader className="items-center text-center">
+                  <div className="p-3 bg-primary/10 rounded-full mb-3">
+                    <MessageCircleQuestion className="h-10 w-10 text-primary" />
+                  </div>
+                  <CardTitle className="text-2xl">AI Symptom Helper</CardTitle>
+                  <CardDescription className="text-base">
+                    Get quick insights about your symptoms. Our AI can guide you, but always consult a doctor for medical advice.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
+                   <Dialog>
+                    <DialogTrigger asChild>
+                      <Button size="lg" className="shadow-md hover:shadow-primary/20 transition-shadow mt-2">
+                        <Zap className="mr-2 h-5 w-5" />
+                        Ask our AI
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[650px] p-0">
+                      <Chatbot />
+                    </DialogContent>
+                  </Dialog>
+                </CardContent>
+                <CardFooter className="justify-center text-center pt-4">
+                  <p className="text-xs text-muted-foreground">
                     For more personalized features and to save your history, please <Link href="/login" className="underline text-primary hover:text-primary/80">login or create an account</Link>.
-                </p>
-            </div>
-        </section>
+                  </p>
+                </CardFooter>
+              </Card>
 
-        <Separator className="my-8 md:my-12" />
-
-        <section id="book-appointment" className="py-16 sm:py-24 bg-secondary/20">
-            <div className="container mx-auto px-4 text-center">
-                <h2 className="text-3xl font-bold text-primary mb-6">Schedule a Consultation</h2>
-                <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-                  Ready to speak with a professional? Book an appointment through our demonstration system.
-                </p>
-                <Button asChild size="lg" className="shadow-lg hover:shadow-primary/30 transition-shadow">
-                  <Link href="/book-appointment">
-                    <CalendarPlus className="mr-2 h-5 w-5" />
-                    Book an Appointment (Demo)
-                  </Link>
-                </Button>
-                 <p className="mt-8 text-center text-sm text-muted-foreground">
+              {/* Book an Appointment Card */}
+              <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+                <CardHeader className="items-center text-center">
+                   <div className="p-3 bg-primary/10 rounded-full mb-3">
+                    <CalendarPlus className="h-10 w-10 text-primary" />
+                  </div>
+                  <CardTitle className="text-2xl">Schedule a Consultation</CardTitle>
+                  <CardDescription className="text-base">
+                    Ready to speak with a professional? Book an appointment through our demonstration system.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
+                  <Button asChild size="lg" className="shadow-md hover:shadow-primary/20 transition-shadow mt-2">
+                    <Link href="/book-appointment">
+                      <Zap className="mr-2 h-5 w-5" />
+                      Book Now (Demo)
+                    </Link>
+                  </Button>
+                </CardContent>
+                <CardFooter className="justify-center text-center pt-4">
+                   <p className="text-xs text-muted-foreground">
                     Full booking confirmation and management are available for registered users. <Link href="/login" className="underline text-primary hover:text-primary/80">Login or sign up</Link> to access.
-                </p>
+                  </p>
+                </CardFooter>
+              </Card>
             </div>
+          </div>
         </section>
 
-        <section className="py-16 sm:py-24 bg-background">
+        <Separator className="my-12 md:my-16" />
+
+        {/* Call to Action Section */}
+        <section className="py-16 sm:py-24 bg-secondary/20">
           <div className="container mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold text-primary mb-6">Ready to Take Control of Your Health?</h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
