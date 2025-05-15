@@ -38,7 +38,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold tracking-tight">Welcome Back!</CardTitle>
-          <CardDescription>Sign in to access MediConsult AI.</CardDescription>
+          <CardDescription>Sign in to access Saveetha AI.</CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />

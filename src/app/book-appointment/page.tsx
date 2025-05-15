@@ -90,7 +90,7 @@ export default function PublicBookAppointmentPage() {
         <div className="container flex flex-col items-center justify-center gap-2 text-center">
           <Logo size={24} />
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} MediConsult AI. Your health, intelligently managed.
+            &copy; {new Date().getFullYear()} Saveetha AI. Your health, intelligently managed.
           </p>
           <p className="text-xs text-muted-foreground">
             This is a demonstration. Always consult with a qualified healthcare professional for medical advice.

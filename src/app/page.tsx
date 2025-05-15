@@ -11,7 +11,6 @@ import Link from "next/link";
 import { Logo } from "@/components/icons/Logo";
 import Chatbot from "@/components/user/Chatbot";
 import { CalendarPlus, MessageCircleQuestion, Zap } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
 import {
   Dialog,
   DialogContent,
@@ -70,7 +69,7 @@ export default function HomePage() {
             <Logo size={64} />
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight text-primary sm:text-5xl md:text-6xl">
-            Welcome to MediConsult AI
+            Welcome to Saveetha AI
           </h1>
           <p className="mt-6 max-w-3xl mx-auto text-lg text-muted-foreground sm:text-xl">
             Your intelligent health companion. Get insights on symptoms or schedule appointments, all powered by cutting-edge AI.
@@ -148,7 +147,7 @@ export default function HomePage() {
         <div className="container flex flex-col items-center justify-center gap-2 text-center">
           <Logo size={24} />
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} MediConsult AI. Your health, intelligently managed.
+            &copy; {new Date().getFullYear()} Saveetha AI. Your health, intelligently managed.
           </p>
           <p className="text-xs text-muted-foreground">
             Disclaimer: Information provided is for general guidance and not a substitute for professional medical advice.

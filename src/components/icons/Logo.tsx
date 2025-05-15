@@ -6,7 +6,7 @@ export function Logo(props: SVGProps<SVGSVGElement> & { size?: number }) {
   return (
     <div className="flex items-center gap-2">
       <Stethoscope size={size} className="text-primary" />
-      <span className="text-xl font-bold text-primary">MediConsult AI</span>
+      <span className="text-xl font-bold text-primary">Saveetha AI</span>
     </div>
   );
 }

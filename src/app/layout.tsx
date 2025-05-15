@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'MediConsult AI',
+  title: 'Saveetha AI',
   description: 'Your AI-powered medical consultation assistant.',
 };
 
