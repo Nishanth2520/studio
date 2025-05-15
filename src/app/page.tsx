@@ -143,20 +143,6 @@ export default function HomePage() {
           </div>
         </section>
 
-        <Separator className="my-12 md:my-16" />
-
-        {/* Call to Action Section */}
-        <section className="py-16 sm:py-24 bg-secondary/20">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold text-primary mb-6">Ready to Take Control of Your Health?</h2>
-            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              Join MediConsult AI today. Whether you're seeking information or providing care, our platform is designed for you.
-            </p>
-            <Button asChild size="lg" className="shadow-lg hover:shadow-primary/30 transition-shadow">
-              <Link href="/login">Sign Up or Login Now</Link>
-            </Button>
-          </div>
-        </section>
       </main>
       <footer className="py-8 border-t bg-background">
         <div className="container flex flex-col items-center justify-center gap-2 text-center">
