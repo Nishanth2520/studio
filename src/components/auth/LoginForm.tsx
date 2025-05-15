@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -13,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, Home } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -22,6 +23,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Separator } from "@/components/ui/separator";
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address." }),
@@ -74,6 +76,10 @@ export default function LoginForm() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleContinueWithoutSignIn = () => {
+    router.push('/');
   };
 
   return (
@@ -157,6 +163,26 @@ export default function LoginForm() {
           onClick={() => setIsSignUp(!isSignUp)}
         >
           {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign Up"}
+        </Button>
+        <div className="relative">
+          <Separator className="my-4" />
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-card px-2 text-muted-foreground">
+              Or
+            </span>
+          </div>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          className="w-full"
+          onClick={handleContinueWithoutSignIn}
+        >
+          <Home className="mr-2 h-4 w-4" />
+          Continue without sign in
         </Button>
       </form>
     </Form>
