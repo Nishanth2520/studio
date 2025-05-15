@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
@@ -5,9 +6,10 @@ import { symptomResponse } from "@/ai/flows/symptom-response";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Bot, User, Send, Loader2 } from "lucide-react";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Bot, User, Send, Loader2, Stethoscope } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 
 interface Message {
@@ -16,23 +18,38 @@ interface Message {
   sender: "user" | "bot";
 }
 
+const commonSymptoms = [
+  "Headache",
+  "Fever",
+  "Cough",
+  "Fatigue",
+  "Nausea",
+  "Sore Throat",
+  "Runny Nose",
+  "Dizziness",
+  "Stomach Pain",
+  "Muscle Ache",
+];
+
 export default function Chatbot() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSendMessage = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  const handleSendMessage = async (e?: FormEvent, symptomText?: string) => {
+    if (e) e.preventDefault();
+    const currentInput = symptomText || input;
+    if (!currentInput.trim()) return;
 
-    const userMessage: Message = { id: Date.now().toString(), text: input, sender: "user" };
+    const userMessage: Message = { id: Date.now().toString(), text: currentInput, sender: "user" };
     setMessages((prev) => [...prev, userMessage]);
-    setInput("");
+    if (!symptomText) setInput(""); // Clear input if it wasn't from a symptom click
     setIsLoading(true);
 
     try {
-      const aiResponse = await symptomResponse({ symptoms: input });
+      const aiResponse = await symptomResponse({ symptoms: currentInput });
       const botMessage: Message = { id: (Date.now() + 1).toString(), text: aiResponse.response, sender: "bot" };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
@@ -51,6 +68,13 @@ export default function Chatbot() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSymptomClick = (symptom: string) => {
+    setInput(symptom);
+    // Optionally, auto-send or focus input
+    // handleSendMessage(undefined, symptom); 
+    inputRef.current?.focus();
   };
 
   useEffect(() => {
@@ -72,6 +96,28 @@ export default function Chatbot() {
       <CardContent className="p-0">
         <ScrollArea className="h-[400px] p-4" ref={scrollAreaRef}>
           <div className="space-y-4">
+            {messages.length === 0 && !isLoading && (
+              <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground p-4">
+                <Stethoscope size={48} className="mb-3 text-primary" />
+                <p className="font-semibold text-lg mb-1">Hello! How are you feeling today?</p>
+                <p className="text-sm mb-3">Describe your symptoms, or select from common ones below.</p>
+                <div className="flex flex-wrap justify-center gap-2 mb-4">
+                  {commonSymptoms.map((symptom) => (
+                    <Badge
+                      key={symptom}
+                      variant="secondary"
+                      className="cursor-pointer hover:bg-accent transition-colors px-3 py-1 text-sm"
+                      onClick={() => handleSymptomClick(symptom)}
+                    >
+                      {symptom}
+                    </Badge>
+                  ))}
+                </div>
+                <p className="text-xs mt-2 p-2 border border-dashed rounded-md bg-secondary/50">
+                  Disclaimer: I am an AI assistant and cannot provide medical diagnoses. Please consult a healthcare professional for medical advice.
+                </p>
+              </div>
+            )}
             {messages.map((msg) => (
               <div
                 key={msg.id}
@@ -85,7 +131,7 @@ export default function Chatbot() {
                   </Avatar>
                 )}
                 <div
-                  className={`max-w-[70%] rounded-lg px-4 py-2 ${
+                  className={`max-w-[70%] rounded-lg px-4 py-2 shadow-sm ${
                     msg.sender === "user"
                       ? "bg-primary text-primary-foreground"
                       : "bg-accent text-accent-foreground"
@@ -105,27 +151,18 @@ export default function Chatbot() {
                     <Avatar className="h-8 w-8">
                         <AvatarFallback className="bg-primary text-primary-foreground"><Bot size={18}/></AvatarFallback>
                     </Avatar>
-                    <div className="max-w-[70%] rounded-lg px-4 py-2 bg-accent text-accent-foreground">
-                        <Loader2 className="h-5 w-5 animate-spin" />
+                    <div className="max-w-[70%] rounded-lg px-4 py-2 bg-accent text-accent-foreground shadow-sm">
+                        <Loader2 className="h-5 w-5 animate-spin text-primary" />
                     </div>
                  </div>
             )}
           </div>
-           {messages.length === 0 && !isLoading && (
-            <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground">
-              <Bot size={48} className="mb-2" />
-              <p>Hello! How are you feeling today?</p>
-              <p className="text-xs">Describe your symptoms, and I'll provide some information.</p>
-               <p className="text-xs mt-2 p-2 border border-dashed rounded-md">
-                Disclaimer: I am an AI assistant and cannot provide medical diagnoses. Please consult a healthcare professional for medical advice.
-              </p>
-            </div>
-          )}
         </ScrollArea>
       </CardContent>
       <CardFooter className="border-t p-4">
         <form onSubmit={handleSendMessage} className="flex w-full items-center gap-2">
           <Input
+            ref={inputRef}
             type="text"
             placeholder="Type your symptoms..."
             value={input}
