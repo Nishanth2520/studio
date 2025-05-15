@@ -5,11 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { CalendarPlus } from "lucide-react";
 
-interface UserDashboardPageProps {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}
-
-export default function UserDashboardPage({ searchParams }: UserDashboardPageProps) {
+// Removed UserDashboardPageProps interface and searchParams from props
+export default function UserDashboardPage() {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="mb-8 text-center">
