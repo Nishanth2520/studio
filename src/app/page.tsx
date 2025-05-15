@@ -55,7 +55,7 @@ export default function HomePage() {
       <Header />
       <main className="flex-1">
         <section className="container mx-auto px-4 py-16 sm:py-24 text-center">
-          <div className="mb-8 inline-block"> {/* Removed animate-pulse for static logo presentation */}
+          <div className="mb-8 inline-block">
             <Logo size={64} />
           </div>
           <h1 className="text-4xl font-bold tracking-tight text-primary sm:text-5xl md:text-6xl">
@@ -64,11 +64,7 @@ export default function HomePage() {
           <p className="mt-6 max-w-3xl mx-auto text-lg text-muted-foreground sm:text-xl">
             Your intelligent health companion. Get insights on symptoms or manage patient interactions, all powered by cutting-edge AI.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
-            <Button asChild size="lg" className="shadow-lg hover:shadow-primary/30 transition-shadow">
-              <Link href="/login">Login / Sign Up</Link>
-            </Button>
-          </div>
+          {/* The Login/Sign Up button was here and is now removed. */}
         </section>
         
         <section id="symptom-checker" className="py-16 sm:py-24 bg-background">
