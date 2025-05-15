@@ -10,8 +10,16 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Logo } from "@/components/icons/Logo";
 import Chatbot from "@/components/user/Chatbot";
-import { CalendarPlus } from 'lucide-react';
+import { CalendarPlus, MessageCircleQuestion } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export default function HomePage() {
   const { user, role, loading } = useAuth();
@@ -64,15 +72,23 @@ export default function HomePage() {
           <p className="mt-6 max-w-3xl mx-auto text-lg text-muted-foreground sm:text-xl">
             Your intelligent health companion. Get insights on symptoms or manage patient interactions, all powered by cutting-edge AI.
           </p>
-          {/* The Login/Sign Up button was here and is now removed. */}
         </section>
         
         <section id="symptom-checker" className="py-16 sm:py-24 bg-background">
-            <div className="container mx-auto px-4">
-                <h2 className="text-3xl font-bold text-primary text-center mb-12 sm:mb-16">AI Symptom Helper</h2>
-                <div className="flex justify-center">
+            <div className="container mx-auto px-4 text-center">
+                <h2 className="text-3xl font-bold text-primary mb-8 sm:mb-12">AI Symptom Helper</h2>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button size="lg" className="shadow-lg hover:shadow-primary/30 transition-shadow">
+                      <MessageCircleQuestion className="mr-2 h-5 w-5" />
+                      Ask our AI Symptom Helper
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[650px] p-0">
+                    {/* Chatbot component itself is a Card, so DialogContent padding is removed to avoid double padding/borders */}
                     <Chatbot />
-                </div>
+                  </DialogContent>
+                </Dialog>
                  <p className="mt-8 text-center text-sm text-muted-foreground">
                     For more personalized features and to save your history, please <Link href="/login" className="underline text-primary hover:text-primary/80">login or create an account</Link>.
                 </p>
