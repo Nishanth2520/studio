@@ -1,7 +1,22 @@
+
 import Chatbot from "@/components/user/Chatbot";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function UserDashboardPage() {
+// Page components in Next.js App Router can receive searchParams as a prop.
+// It's important to handle them correctly if used.
+// See: https://nextjs.org/docs/app/api-reference/file-conventions/page#searchparams-optional
+interface UserDashboardPageProps {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+export default function UserDashboardPage({ searchParams }: UserDashboardPageProps) {
+  // If you were to use searchParams, access specific keys directly:
+  // const exampleQuery = searchParams?.example;
+  // console.log('Example query:', exampleQuery);
+
+  // Avoid patterns like Object.keys(searchParams) or {...searchParams} directly in Server Components
+  // as searchParams is a special read-only object.
+
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="mb-12 text-center">
