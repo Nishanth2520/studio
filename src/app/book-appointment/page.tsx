@@ -8,7 +8,6 @@ import DoctorSelection from "@/components/user/booking/DoctorSelection";
 import AppointmentCalendar from "@/components/user/booking/AppointmentCalendar";
 import BookingForm from "@/components/user/booking/BookingForm";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Logo } from "@/components/icons/Logo";
@@ -73,17 +72,7 @@ export default function PublicBookAppointmentPage() {
               </Card>
             </div>
           </div>
-
-          <Separator className="my-12" />
-
-          <div className="text-center">
-            <p className="text-muted-foreground mb-4">
-              Once you've completed all steps, your appointment request will be submitted (as part of this demo).
-            </p>
-            <Button asChild size="lg">
-                <Link href="/login">Login or Sign Up for Full Features</Link>
-            </Button>
-          </div>
+          {/* The section containing the Separator and the Button was confirmed as removed. */}
         </div>
       </main>
       <footer className="py-8 border-t bg-background">
