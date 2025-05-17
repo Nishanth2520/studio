@@ -69,10 +69,10 @@ export default function HomePage() {
             <Logo size={64} />
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight text-primary sm:text-5xl md:text-6xl">
-            Welcome to Saveetha AI
+            Intelligent Health, Simplified by Saveetha AI
           </h1>
           <p className="mt-6 max-w-3xl mx-auto text-lg text-muted-foreground sm:text-xl">
-            Your intelligent health companion. Get insights on symptoms or schedule appointments, all powered by cutting-edge AI.
+            Access AI-powered symptom insights and easily schedule appointments. Your health journey, managed smarter.
           </p>
         </section>
         
@@ -90,7 +90,7 @@ export default function HomePage() {
                   </div>
                   <CardTitle className="text-2xl">AI Symptom Helper</CardTitle>
                   <CardDescription className="text-base">
-                    Get quick insights about your symptoms. Our AI can guide you, but always consult a doctor for medical advice.
+                    Get AI-driven insights on your symptoms. Fast, informative, and always guiding you to consult a professional for medical advice.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
@@ -121,7 +121,7 @@ export default function HomePage() {
                   </div>
                   <CardTitle className="text-2xl">Schedule a Consultation</CardTitle>
                   <CardDescription className="text-base">
-                    Ready to speak with a professional? Book an appointment through our demonstration system.
+                    Easily find and book appointments with healthcare professionals using our demonstration booking system.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
