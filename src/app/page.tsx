@@ -64,16 +64,26 @@ export default function HomePage() {
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="container mx-auto px-4 py-16 sm:py-24 text-center">
-          <div className="mb-8 inline-block">
-            <Logo size={64} />
+        <section
+          className="relative text-center bg-cover bg-center bg-no-repeat py-24 sm:py-32"
+          style={{ backgroundImage: "url('https://placehold.co/1920x800.png')" }}
+          data-ai-hint="modern building architecture"
+        >
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/60"></div>
+
+          {/* Content container */}
+          <div className="relative z-10 container mx-auto px-4">
+            <div className="mb-8 inline-block">
+              <Logo size={64} />
+            </div>
+            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
+              Intelligent Health, Simplified by Saveetha AI
+            </h1>
+            <p className="mt-6 max-w-3xl mx-auto text-lg text-gray-100 sm:text-xl">
+              Access AI-powered symptom insights and easily schedule appointments. Your health journey, managed smarter.
+            </p>
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-primary sm:text-5xl md:text-6xl">
-            Intelligent Health, Simplified by Saveetha AI
-          </h1>
-          <p className="mt-6 max-w-3xl mx-auto text-lg text-muted-foreground sm:text-xl">
-            Access AI-powered symptom insights and easily schedule appointments. Your health journey, managed smarter.
-          </p>
         </section>
         
         {/* Main Features Section - 2 Column Layout */}
@@ -96,7 +106,7 @@ export default function HomePage() {
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
                    <Dialog>
                     <DialogTrigger asChild>
-                      <Button size="lg" className="shadow-md mt-2">
+                      <Button size="lg" className="shadow-md hover:bg-primary/90 mt-2">
                         <Zap className="mr-2 h-5 w-5" />
                         Ask our AI
                       </Button>
@@ -125,7 +135,7 @@ export default function HomePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
-                  <Button asChild size="lg" className="shadow-md mt-2">
+                  <Button asChild size="lg" className="shadow-md hover:bg-primary/90 mt-2">
                     <Link href="/book-appointment">
                       <Zap className="mr-2 h-5 w-5" />
                       Book Now (Demo)
