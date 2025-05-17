@@ -96,7 +96,7 @@ export default function HomePage() {
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
                    <Dialog>
                     <DialogTrigger asChild>
-                      <Button size="lg" className="shadow-md hover:shadow-primary/20 transition-shadow mt-2">
+                      <Button size="lg" className="shadow-md mt-2">
                         <Zap className="mr-2 h-5 w-5" />
                         Ask our AI
                       </Button>
@@ -125,7 +125,7 @@ export default function HomePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
-                  <Button asChild size="lg" className="shadow-md hover:shadow-primary/20 transition-shadow mt-2">
+                  <Button asChild size="lg" className="shadow-md mt-2">
                     <Link href="/book-appointment">
                       <Zap className="mr-2 h-5 w-5" />
                       Book Now (Demo)
