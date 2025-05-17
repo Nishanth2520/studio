@@ -66,8 +66,8 @@ export default function HomePage() {
         {/* Hero Section */}
         <section
           className="relative text-center bg-cover bg-center bg-no-repeat py-24 sm:py-32"
-          style={{ backgroundImage: "url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fmedicalneetug.com%2Fcollege%2Fsaveetha-medical-college-hospital&psig=AOvVaw0CcYPga-gBB92Ktze2_MqS&ust=1747557203211000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCq6-GLqo0DFQAAAAAdAAAAABAE')" }}
-          data-ai-hint="hospital building"
+          style={{ backgroundImage: "url('https://media.canva.com/v2/image-resize/format:JPG/height:300/quality:92/uri:ifs%3A%2F%2FM%2F6a4d73f6-2689-4d46-a68f-21de909896a6/watermark:F/width:500?csig=AAAAAAAAAAAAAAAAAAAAAI6VpOcWlhDuYKDROAWnCgYobO-ZjsMXBGzFUkStFSvh&exp=1747490006&osig=AAAAAAAAAAAAAAAAAAAAANJvXBO_-vSefLtXNlWlfNZwYwD-DiHvAMnIm6mgpP-O&signer=media-rpc&x-canva-quality=thumbnail_large')" }}
+          data-ai-hint="blue texture"
         >
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/60"></div>
