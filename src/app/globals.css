@@ -24,7 +24,7 @@ body {
     --secondary-foreground: 240 10% 3.9%;
 
     --muted: 0 0% 94.1%; /* light gray #F0F0F0 */
-    --muted-foreground: 240 3.8% 46.1%;
+    --muted-foreground: 240 5% 30%; /* Adjusted for better contrast: was 240 3.8% 46.1% */
 
     --accent: 200 60% 70%; /* soft blue #ADD8E6 variant for better visibility */
     --accent-foreground: 240 10% 3.9%; /* dark text on accent */
@@ -71,7 +71,7 @@ body {
     --secondary-foreground: 0 0% 98%;
 
     --muted: 240 3.7% 15.9%;
-    --muted-foreground: 0 0% 63.9%;
+    --muted-foreground: 0 0% 63.9%; /* This already has good contrast in dark mode */
 
     --accent: 200 50% 50%; /* adjusted soft blue for dark mode */
     --accent-foreground: 0 0% 98%;
