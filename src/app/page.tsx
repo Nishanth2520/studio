@@ -10,13 +10,14 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Logo } from "@/components/icons/Logo";
 import Chatbot from "@/components/user/Chatbot";
-import { CalendarPlus, MessageCircleQuestion, Zap } from 'lucide-react';
+import { CalendarPlus, MessageCircleQuestion, Zap, Hospital, Users, MessageSquareHeart } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
 
 export default function HomePage() {
   const { user, role, loading } = useAuth();
@@ -30,13 +31,10 @@ export default function HomePage() {
         } else if (role === 'user') {
           router.replace('/dashboard');
         } else {
-          // This case should ideally not happen if role is always set on login
-          // For safety, redirect to login if role is unclear but user is authenticated
           console.warn("User authenticated but role is unclear. Redirecting to login.");
           router.replace('/login');
         }
       }
-      // If !user, we don't redirect. The public page content will be shown.
     }
   }, [user, role, loading, router]);
 
@@ -48,8 +46,6 @@ export default function HomePage() {
     );
   }
 
-  // If user is logged in but redirection hasn't happened yet (e.g., due to useEffect async nature)
-  // This helps prevent a flash of the public homepage for logged-in users.
   if (user && !loading) { 
       return (
         <div className="flex min-h-screen items-center justify-center bg-background">
@@ -58,7 +54,6 @@ export default function HomePage() {
       );
   }
 
-  // If !user and !loading, render the public homepage
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-secondary/10 to-secondary/30">
       <Header />
@@ -69,11 +64,8 @@ export default function HomePage() {
           style={{ backgroundImage: "url('https://media.canva.com/v2/image-resize/format:JPG/height:300/quality:92/uri:ifs%3A%2F%2FM%2F6a4d73f6-2689-4d46-a68f-21de909896a6/watermark:F/width:500?csig=AAAAAAAAAAAAAAAAAAAAAI6VpOcWlhDuYKDROAWnCgYobO-ZjsMXBGzFUkStFSvh&exp=1747490006&osig=AAAAAAAAAAAAAAAAAAAAANJvXBO_-vSefLtXNlWlfNZwYwD-DiHvAMnIm6mgpP-O&signer=media-rpc&x-canva-quality=thumbnail_large')" }}
           data-ai-hint="blue texture"
         >
-          {/* Overlay */}
           <div className="absolute inset-0 bg-black/60"></div>
-
-          {/* Content container */}
-          <div className="relative z-10 container mx-auto px-4">
+          <div className="relative z-10 container mx-auto px-4 animate-fade-in-up">
             <div className="mb-8 inline-block">
               <Logo size={64} />
             </div>
@@ -86,21 +78,20 @@ export default function HomePage() {
           </div>
         </section>
         
-        {/* Main Features Section - 2 Column Layout */}
-        <section className="py-12 sm:py-16 bg-background">
+        {/* Main Features Section */}
+        <section className="py-16 sm:py-20 bg-background">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-primary mb-12 sm:mb-16">Explore Our Services</h2>
+            <h2 className="text-3xl font-bold text-center text-primary mb-12 sm:mb-16 animate-fade-in animation-delay-200ms">Explore Our Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
               
-              {/* AI Symptom Helper Card */}
-              <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+              <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105 flex flex-col animate-fade-in animation-delay-400ms">
                 <CardHeader className="items-center text-center">
                   <div className="p-3 bg-primary/10 rounded-full mb-3">
                     <MessageCircleQuestion className="h-10 w-10 text-primary" />
                   </div>
                   <CardTitle className="text-2xl">AI Symptom Helper</CardTitle>
                   <CardDescription className="text-base">
-                    Get AI-driven insights on your symptoms. Fast, informative, and always guiding you to consult a professional for medical advice.
+                    Get AI-driven insights on your symptoms. Fast, informative, and guiding you towards professional medical advice.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
@@ -118,13 +109,12 @@ export default function HomePage() {
                 </CardContent>
                 <CardFooter className="justify-center text-center pt-4">
                   <p className="text-xs text-muted-foreground">
-                    For more personalized features and to save your history, please <Link href="/login" className="underline text-primary hover:text-primary/80">login or create an account</Link>.
+                    For full features and history, please <Link href="/login" className="underline text-primary hover:text-primary/80">login or create an account</Link>.
                   </p>
                 </CardFooter>
               </Card>
 
-              {/* Book an Appointment Card */}
-              <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
+              <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105 flex flex-col animate-fade-in animation-delay-600ms">
                 <CardHeader className="items-center text-center">
                    <div className="p-3 bg-primary/10 rounded-full mb-3">
                     <CalendarPlus className="h-10 w-10 text-primary" />
@@ -144,11 +134,47 @@ export default function HomePage() {
                 </CardContent>
                 <CardFooter className="justify-center text-center pt-4">
                    <p className="text-xs text-muted-foreground">
-                    Full booking confirmation and management are available for registered users. <Link href="/login" className="underline text-primary hover:text-primary/80">Login or sign up</Link> to access.
+                    Registered users can access full booking management. <Link href="/login" className="underline text-primary hover:text-primary/80">Login or sign up</Link>.
                   </p>
                 </CardFooter>
               </Card>
             </div>
+          </div>
+        </section>
+
+        <Separator className="my-16" />
+
+        {/* About Us Placeholder Section */}
+        <section className="py-12 sm:py-16 bg-secondary/30">
+          <div className="container mx-auto px-4 text-center animate-fade-in">
+             <div className="inline-block p-3 bg-primary/10 rounded-full mb-4">
+                <Hospital className="h-10 w-10 text-primary" />
+              </div>
+            <h2 className="text-3xl font-bold text-primary mb-6">About Saveetha AI</h2>
+            <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-8">
+              Saveetha AI is dedicated to revolutionizing healthcare access through intelligent technology. Our mission is to empower patients and support medical professionals with intuitive and efficient digital tools. We believe in a future where managing health is simpler and more informed.
+            </p>
+            {/* Image Carousel for About Us would go here in a more advanced version */}
+             <img src="https://placehold.co/800x400.png" alt="About Saveetha AI" data-ai-hint="hospital team" className="mx-auto rounded-lg shadow-md" />
+          </div>
+        </section>
+
+        <Separator className="my-16" />
+        
+        {/* Testimonials Placeholder Section */}
+        <section className="py-12 sm:py-16 bg-background">
+          <div className="container mx-auto px-4 text-center animate-fade-in">
+            <div className="inline-block p-3 bg-primary/10 rounded-full mb-4">
+                <MessageSquareHeart className="h-10 w-10 text-primary" />
+            </div>
+            <h2 className="text-3xl font-bold text-primary mb-6">What Our Users Say</h2>
+            <div className="max-w-3xl mx-auto text-lg text-muted-foreground mb-8">
+              <p className="italic">"Saveetha AI made it so easy to understand my symptoms and find a doctor. A truly helpful platform!"</p>
+              <p className="mt-2 text-sm font-semibold">- A. User</p>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              (More testimonials would be displayed in a sliding carousel here.)
+            </p>
           </div>
         </section>
 
@@ -167,3 +193,4 @@ export default function HomePage() {
     </div>
   );
 }
+
