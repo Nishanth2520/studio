@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, UserCircle } from "lucide-react"; // Removed UserCog as it's not used
+import { LogOut, UserCircle } from "lucide-react";
 import { Logo } from "@/components/icons/Logo";
 import {
   DropdownMenu,
@@ -61,19 +61,27 @@ export default function Header() {
             </DropdownMenu>
           ) : (
             <>
-              <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex"> {/* Hidden on very small screens initially */}
-                <Link href="/about">About Us</Link>
+              <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
+                <Link href="/about">
+                  <span>About Us</span>
+                </Link>
               </Button>
               <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-                <Link href="/contact">Contact Us</Link>
+                <Link href="/contact">
+                  <span>Contact Us</span>
+                </Link>
               </Button>
-              <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex"> {/* Hidden on small, visible on medium+ */}
-                <Link href="/faq">Help/FAQ</Link>
+              <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
+                <Link href="/faq">
+                  <span>Help/FAQ</span>
+                </Link>
               </Button>
               <Button asChild variant="outline">
                 <Link href="/login">
-                  <UserCircle className="mr-0 sm:mr-2 h-4 w-4" /> {/* Icon margin responsive */}
-                  <span className="hidden sm:inline">Login</span> {/* Text hidden on very small screens */}
+                  <span className="flex items-center">
+                    <UserCircle className="mr-0 sm:mr-2 h-4 w-4" />
+                    <span className="hidden sm:inline">Login</span>
+                  </span>
                 </Link>
               </Button>
             </>
