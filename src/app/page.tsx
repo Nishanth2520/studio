@@ -66,8 +66,8 @@ export default function HomePage() {
         {/* Hero Section */}
         <section
           className="relative text-center bg-cover bg-center bg-no-repeat py-24 sm:py-32"
-          style={{ backgroundImage: "url('https://placehold.co/1920x800.png')" }}
-          data-ai-hint="modern building architecture"
+          style={{ backgroundImage: "url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fmedicalneetug.com%2Fcollege%2Fsaveetha-medical-college-hospital&psig=AOvVaw0CcYPga-gBB92Ktze2_MqS&ust=1747557203211000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCKCq6-GLqo0DFQAAAAAdAAAAABAE')" }}
+          data-ai-hint="hospital building"
         >
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/60"></div>
