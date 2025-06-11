@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useEffect, useState, type FormEvent } from 'react';
+import React, { useEffect, useState, useMemo, type FormEvent } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -124,22 +124,25 @@ export default function PublicBookAppointmentPage() {
     },
   });
 
+  // Memoize doctorIdFromSearch to potentially stabilize dependencies for the useEffect below
+  const doctorIdFromSearch = useMemo(() => searchParams.get('doctorId'), [searchParams]);
+
   useEffect(() => {
-    const doctorId = searchParams.get('doctorId');
-    if (doctorId) {
-      const doctor = DUMMY_DOCTORS.find(d => d.id === doctorId);
+    // Use the memoized doctorIdFromSearch
+    if (doctorIdFromSearch) {
+      const doctor = DUMMY_DOCTORS.find(d => d.id === doctorIdFromSearch);
       if (doctor) {
         setSelectedDoctor(doctor);
       } else {
         toast({ title: "Error", description: "Doctor not found.", variant: "destructive" });
-        router.push('/'); // Redirect if doctor not found
+        router.push('/'); 
       }
     } else {
         toast({ title: "Error", description: "No doctor selected.", variant: "destructive" });
-        router.push('/'); // Redirect if no doctor ID
+        router.push('/'); 
     }
     setIsLoadingDoctor(false);
-  }, [searchParams, router]);
+  }, [doctorIdFromSearch, router]); // Removed DUMMY_DOCTORS and toast from deps as they are stable or setters
 
   useEffect(() => {
     if (authUser && !form.getValues("patientName")) {
@@ -157,7 +160,7 @@ export default function PublicBookAppointmentPage() {
     } else {
       setAvailableTimes([]);
     }
-  }, [form.watch("appointmentDate")]);
+  }, [form, form.watch("appointmentDate")]);
 
 
   const onSubmit = (data: BookingFormValues) => {
@@ -297,7 +300,7 @@ export default function PublicBookAppointmentPage() {
                       <FormItem className="flex flex-col">
                         <FormLabel className="mb-2 text-center md:text-left">Available Time Slots (PST)</FormLabel>
                          <FormControl>
-                            <div>
+                            <div> {/* This div is the direct child of FormControl */}
                               {form.getValues("appointmentDate") && availableTimes.length > 0 ? (
                                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
                                   {availableTimes.map(time => (
@@ -480,5 +483,3 @@ export default function PublicBookAppointmentPage() {
     </div>
   );
 }
-
-    
