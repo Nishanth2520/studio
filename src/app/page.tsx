@@ -3,25 +3,92 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import Header from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Logo } from "@/components/icons/Logo";
 import Chatbot from "@/components/user/Chatbot";
-import { CalendarPlus, MessageCircleQuestion, Zap, Hospital, Users, MessageSquareHeart } from 'lucide-react';
+import { CalendarPlus, MessageCircleQuestion, Zap, Hospital, Users, MessageSquareHeart, Star, StarHalf, Briefcase, ShieldCheck, UserCircle2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
   DialogTrigger,
+  DialogClose,
+  DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from '@/components/ui/scroll-area';
+
+interface Doctor {
+  id: string;
+  name: string;
+  age: number;
+  experience: number; // years
+  specialization: string;
+  rating: number; // 0-5
+  avatar: string;
+  dataAiHint: string;
+}
+
+const DUMMY_DOCTORS: Doctor[] = [
+  { id: 'doc1', name: 'Dr. Emily Carter', age: 45, experience: 15, specialization: 'Cardiology', rating: 4.5, avatar: 'https://placehold.co/100x100.png?text=EC', dataAiHint: 'doctor woman' },
+  { id: 'doc2', name: 'Dr. Johnathan Lee', age: 52, experience: 20, specialization: 'Pediatrics', rating: 5, avatar: 'https://placehold.co/100x100.png?text=JL', dataAiHint: 'doctor man' },
+  { id: 'doc3', name: 'Dr. Sarah Green', age: 38, experience: 10, specialization: 'Dermatology', rating: 4.2, avatar: 'https://placehold.co/100x100.png?text=SG', dataAiHint: 'doctor portrait' },
+  { id: 'doc4', name: 'Dr. Michael Brown', age: 48, experience: 18, specialization: 'Cardiology', rating: 4.8, avatar: 'https://placehold.co/100x100.png?text=MB', dataAiHint: 'doctor male' },
+  { id: 'doc5', name: 'Dr. Linda White', age: 55, experience: 25, specialization: 'Cardiology', rating: 4.9, avatar: 'https://placehold.co/100x100.png?text=LW', dataAiHint: 'doctor senior' },
+  { id: 'doc6', name: 'Dr. Kevin Harris', age: 42, experience: 12, specialization: 'Pulmonology', rating: 4.3, avatar: 'https://placehold.co/100x100.png?text=KH', dataAiHint: 'doctor medical' },
+  { id: 'doc7', name: 'Dr. Jessica Davis', age: 39, experience: 9, specialization: 'Pulmonology', rating: 4.0, avatar: 'https://placehold.co/100x100.png?text=JD', dataAiHint: 'doctor female' },
+  { id: 'doc8', name: 'Dr. Brian Wilson', age: 60, experience: 30, specialization: 'Cardiology', rating: 5, avatar: 'https://placehold.co/100x100.png?text=BW', dataAiHint: 'doctor experienced' },
+  { id: 'doc9', name: 'Dr. Olivia Martinez', age: 41, experience: 13, specialization: 'Dermatology', rating: 4.6, avatar: 'https://placehold.co/100x100.png?text=OM', dataAiHint: 'doctor skin' },
+  { id: 'doc10', name: 'Dr. David Rodriguez', age: 47, experience: 17, specialization: 'Pediatrics', rating: 4.7, avatar: 'https://placehold.co/100x100.png?text=DR', dataAiHint: 'doctor children' },
+  { id: 'doc11', name: 'Dr. Sophia Miller', age: 35, experience: 8, specialization: 'Cardiology', rating: 4.1, avatar: 'https://placehold.co/100x100.png?text=SM', dataAiHint: 'heart specialist' },
+  { id: 'doc12', name: 'Dr. James Anderson', age: 50, experience: 22, specialization: 'Pulmonology', rating: 4.8, avatar: 'https://placehold.co/100x100.png?text=JA', dataAiHint: 'doctor lungs' },
+  { id: 'doc13', name: 'Dr. Ava Thomas', age: 43, experience: 14, specialization: 'Cardiology', rating: 4.3, avatar: 'https://placehold.co/100x100.png?text=AT', dataAiHint: 'professional doctor' },
+  { id: 'doc14', name: 'Dr. Noah Jackson', age: 37, experience: 9, specialization: 'Pediatrics', rating: 4.4, avatar: 'https://placehold.co/100x100.png?text=NJ', dataAiHint: 'young doctor' },
+  { id: 'doc15', name: 'Dr. Isabella White', age: 51, experience: 19, specialization: 'Dermatology', rating: 4.9, avatar: 'https://placehold.co/100x100.png?text=IW', dataAiHint: 'female specialist' },
+  { id: 'doc16', name: 'Dr. Lucas Harris', age: 46, experience: 16, specialization: 'Pulmonology', rating: 4.5, avatar: 'https://placehold.co/100x100.png?text=LH', dataAiHint: 'experienced male' },
+  { id: 'doc17', name: 'Dr. Mia Martin', age: 40, experience: 11, specialization: 'Pediatrics', rating: 4.6, avatar: 'https://placehold.co/100x100.png?text=MM', dataAiHint: 'kind doctor' },
+  { id: 'doc18', name: 'Dr. Ethan Thompson', age: 53, experience: 23, specialization: 'Dermatology', rating: 4.7, avatar: 'https://placehold.co/100x100.png?text=ET', dataAiHint: 'professional male' },
+];
+
+const SPECIALIZATIONS = Array.from(new Set(DUMMY_DOCTORS.map(doc => doc.specialization))).sort();
+
+const StarRating = ({ rating, className }: { rating: number, className?: string }) => {
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+  return (
+    <div className={cn("flex items-center", className)}>
+      {[...Array(fullStars)].map((_, i) => <Star key={`full-${i}`} className="h-4 w-4 text-yellow-400 fill-yellow-400" />)}
+      {halfStar && <StarHalf key="half" className="h-4 w-4 text-yellow-400 fill-yellow-400" />}
+      {[...Array(emptyStars)].map((_, i) => <Star key={`empty-${i}`} className="h-4 w-4 text-gray-300" />)}
+      <span className="ml-1.5 text-xs text-muted-foreground">({rating.toFixed(1)})</span>
+    </div>
+  );
+};
+
 
 export default function HomePage() {
   const { user, role, loading } = useAuth();
   const router = useRouter();
+  const [selectedSpecialization, setSelectedSpecialization] = useState<string>("");
+  const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
+  const [isDoctorDialogValid, setIsDoctorDialogValid] = useState(true);
+
 
   useEffect(() => {
     if (!loading) {
@@ -38,6 +105,16 @@ export default function HomePage() {
     }
   }, [user, role, loading, router]);
 
+  useEffect(() => {
+    if (selectedSpecialization) {
+      const filtered = DUMMY_DOCTORS.filter(doc => doc.specialization === selectedSpecialization);
+      const sorted = filtered.sort((a, b) => b.rating - a.rating || b.experience - a.experience);
+      setRecommendedDoctors(sorted.slice(0, 6));
+    } else {
+      setRecommendedDoctors([]);
+    }
+  }, [selectedSpecialization]);
+
   if (loading) { 
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -53,6 +130,13 @@ export default function HomePage() {
         </div>
       );
   }
+  
+  // This effect ensures the dialog doesn't try to render on the server.
+  // It can help prevent hydration errors with complex dialogs.
+  useEffect(() => {
+    setIsDoctorDialogValid(true);
+  }, []);
+
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-secondary/10 to-secondary/30">
@@ -121,16 +205,91 @@ export default function HomePage() {
                   </div>
                   <CardTitle className="text-2xl">Schedule a Consultation</CardTitle>
                   <CardDescription className="text-base">
-                    Easily find and book appointments with healthcare professionals using our demonstration booking system.
+                    Find specialists and book appointments based on your needs.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
-                  <Button asChild size="lg" className="shadow-md hover:bg-primary/90 mt-2">
-                    <Link href="/book-appointment">
-                      <Zap className="mr-2 h-5 w-5" />
-                      Book Now (Demo)
-                    </Link>
-                  </Button>
+                  {isDoctorDialogValid && (
+                    <Dialog onOpenChange={() => { setSelectedSpecialization(""); setRecommendedDoctors([]); }}>
+                      <DialogTrigger asChild>
+                        <Button size="lg" className="shadow-md hover:bg-primary/90 mt-2">
+                          <Zap className="mr-2 h-5 w-5" />
+                          Find a Doctor
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-3xl">
+                        <DialogHeader>
+                          <DialogTitle className="text-2xl text-primary">Find Your Doctor</DialogTitle>
+                          <DialogDescription>
+                            Select a medical specialization to see our top recommended doctors.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="py-4 space-y-6">
+                          <Select onValueChange={setSelectedSpecialization} defaultValue={selectedSpecialization}>
+                            <SelectTrigger className="w-full sm:w-[300px] mx-auto">
+                              <SelectValue placeholder="Select a Specialization" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {SPECIALIZATIONS.map(spec => (
+                                <SelectItem key={spec} value={spec}>{spec}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+
+                          {selectedSpecialization && recommendedDoctors.length === 0 && (
+                            <p className="text-center text-muted-foreground">No doctors found for {selectedSpecialization}. Try another specialization.</p>
+                          )}
+
+                          {recommendedDoctors.length > 0 && (
+                            <div className="space-y-4">
+                              <h3 className="text-lg font-semibold text-center text-primary">Recommended Doctors for {selectedSpecialization}</h3>
+                              <ScrollArea className="h-[400px] pr-3">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                  {recommendedDoctors.map(doc => (
+                                    <Card key={doc.id} className="shadow-md hover:shadow-lg transition-shadow">
+                                      <CardHeader className="flex flex-row items-start gap-4 space-y-0 p-4">
+                                        <Avatar className="h-16 w-16 border">
+                                          <AvatarImage src={doc.avatar} alt={doc.name} data-ai-hint={doc.dataAiHint} />
+                                          <AvatarFallback>{doc.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
+                                        </Avatar>
+                                        <div className="flex-1">
+                                          <CardTitle className="text-lg text-primary">{doc.name}</CardTitle>
+                                          <StarRating rating={doc.rating} className="mt-1" />
+                                        </div>
+                                      </CardHeader>
+                                      <CardContent className="p-4 pt-0 space-y-1.5 text-sm">
+                                        <div className="flex items-center">
+                                          <UserCircle2 className="h-4 w-4 mr-2 text-muted-foreground" />
+                                          <span>Age: {doc.age}</span>
+                                        </div>
+                                        <div className="flex items-center">
+                                          <Briefcase className="h-4 w-4 mr-2 text-muted-foreground" />
+                                          <span>Experience: {doc.experience} years</span>
+                                        </div>
+                                      </CardContent>
+                                      <CardFooter className="p-4 pt-2">
+                                        <DialogClose asChild>
+                                          <Button className="w-full" onClick={() => router.push('/book-appointment')}>
+                                            <CalendarPlus className="mr-2 h-4 w-4"/>
+                                            Book Appointment
+                                          </Button>
+                                        </DialogClose>
+                                      </CardFooter>
+                                    </Card>
+                                  ))}
+                                </div>
+                              </ScrollArea>
+                            </div>
+                          )}
+                        </div>
+                        <DialogFooter>
+                           <DialogClose asChild>
+                             <Button variant="outline">Close</Button>
+                           </DialogClose>
+                         </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  )}
                 </CardContent>
                 <CardFooter className="justify-center text-center pt-4">
                    <p className="text-xs text-muted-foreground">
@@ -193,4 +352,3 @@ export default function HomePage() {
     </div>
   );
 }
-
