@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Logo } from "@/components/icons/Logo";
 import Chatbot from "@/components/user/Chatbot";
-import { CalendarPlus, MessageCircleQuestion, Zap, Hospital, Users, MessageSquareHeart, Star, StarHalf, Briefcase, ShieldCheck, UserCircle2 } from 'lucide-react';
+import { CalendarPlus, MessageCircleQuestion, Zap, Hospital, Users, MessageSquareHeart, Star, StarHalf, Briefcase, ShieldCheck, UserCircle2, Activity } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -32,6 +32,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 interface Doctor {
@@ -88,8 +89,14 @@ export default function HomePage() {
   const router = useRouter();
   const [selectedSpecialization, setSelectedSpecialization] = useState<string>("");
   const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
-  const [isDoctorDialogVald, setIsDoctorDialogValid] = useState(true); // Renamed to avoid conflict if a global isDoctorDialogValid existed, though unlikely.
+  const [isDoctorDialogClientReady, setIsDoctorDialogClientReady] = useState(false);
 
+
+  useEffect(() => {
+    // This effect ensures client-side specific logic runs after mount,
+    // helping prevent hydration mismatches for components like Dialog.
+    setIsDoctorDialogClientReady(true); 
+  }, []);
 
   useEffect(() => {
     if (!loading) {
@@ -116,12 +123,6 @@ export default function HomePage() {
     }
   }, [selectedSpecialization]);
   
-  // This effect ensures the dialog doesn't try to render on the server, or that client-side specific logic runs on mount.
-  // Moved before conditional returns to adhere to Rules of Hooks.
-  useEffect(() => {
-    setIsDoctorDialogValid(true);
-  }, []);
-
 
   if (loading) { 
     return (
@@ -139,7 +140,6 @@ export default function HomePage() {
       );
   }
   
-
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-secondary/10 to-secondary/30">
       <Header />
@@ -211,7 +211,7 @@ export default function HomePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
-                  {isDoctorDialogVald && (
+                  {isDoctorDialogClientReady && (
                     <Dialog onOpenChange={() => { setSelectedSpecialization(""); setRecommendedDoctors([]); }}>
                       <DialogTrigger asChild>
                         <Button size="lg" className="shadow-md hover:bg-primary/90 mt-2">
@@ -238,38 +238,52 @@ export default function HomePage() {
                             </SelectContent>
                           </Select>
 
+                          {!selectedSpecialization && recommendedDoctors.length === 0 && (
+                             <p className="text-center text-sm text-muted-foreground pt-2">
+                                Please select a specialization to see doctor recommendations.
+                              </p>
+                          )}
+
                           {selectedSpecialization && recommendedDoctors.length === 0 && (
-                            <p className="text-center text-muted-foreground">No doctors found for {selectedSpecialization}. Try another specialization.</p>
+                            <div className="text-center text-muted-foreground py-6">
+                              <Users className="h-12 w-12 mx-auto mb-3 text-primary/50" />
+                              <p className="font-semibold">No doctors found for {selectedSpecialization}.</p>
+                              <p className="text-sm">Please try another specialization or check back later.</p>
+                            </div>
                           )}
 
                           {recommendedDoctors.length > 0 && (
                             <div className="space-y-4">
                               <h3 className="text-lg font-semibold text-center text-primary">Recommended Doctors for {selectedSpecialization}</h3>
-                              <ScrollArea className="h-[400px] pr-3">
+                              <ScrollArea className="max-h-[50vh] pr-3">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   {recommendedDoctors.map(doc => (
-                                    <Card key={doc.id} className="shadow-md hover:shadow-lg transition-shadow">
-                                      <CardHeader className="flex flex-row items-start gap-4 space-y-0 p-4">
-                                        <Avatar className="h-16 w-16 border">
+                                    <Card key={doc.id} className="shadow-md hover:shadow-lg transition-shadow flex flex-col">
+                                      <CardContent className="p-4 flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-grow">
+                                        <Avatar className="h-20 w-20 sm:h-24 sm:w-24 border shrink-0 mb-3 sm:mb-0">
                                           <AvatarImage src={doc.avatar} alt={doc.name} data-ai-hint={doc.dataAiHint} />
                                           <AvatarFallback>{doc.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
                                         </Avatar>
-                                        <div className="flex-1">
-                                          <CardTitle className="text-lg text-primary">{doc.name}</CardTitle>
-                                          <StarRating rating={doc.rating} className="mt-1" />
-                                        </div>
-                                      </CardHeader>
-                                      <CardContent className="p-4 pt-0 space-y-1.5 text-sm">
-                                        <div className="flex items-center">
-                                          <UserCircle2 className="h-4 w-4 mr-2 text-muted-foreground" />
-                                          <span>Age: {doc.age}</span>
-                                        </div>
-                                        <div className="flex items-center">
-                                          <Briefcase className="h-4 w-4 mr-2 text-muted-foreground" />
-                                          <span>Experience: {doc.experience} years</span>
+                                        <div className="flex-1 text-center sm:text-left">
+                                          <CardTitle className="text-xl font-semibold text-primary mb-1">{doc.name}</CardTitle>
+                                          <StarRating rating={doc.rating} className="mb-2 justify-center sm:justify-start" />
+                                          <Badge variant="outline" className="mb-3">
+                                            <Activity className="mr-1.5 h-3.5 w-3.5" />
+                                            {doc.specialization}
+                                          </Badge>
+                                          <div className="text-sm text-muted-foreground space-y-1">
+                                            <div className="flex items-center justify-center sm:justify-start">
+                                              <UserCircle2 className="h-4 w-4 mr-2 text-primary/70" />
+                                              <span>Age: {doc.age}</span>
+                                            </div>
+                                            <div className="flex items-center justify-center sm:justify-start">
+                                              <Briefcase className="h-4 w-4 mr-2 text-primary/70" />
+                                              <span>Experience: {doc.experience} years</span>
+                                            </div>
+                                          </div>
                                         </div>
                                       </CardContent>
-                                      <CardFooter className="p-4 pt-2">
+                                      <CardFooter className="p-4 pt-2 mt-auto">
                                         <DialogClose asChild>
                                           <Button className="w-full" onClick={() => router.push('/book-appointment')}>
                                             <CalendarPlus className="mr-2 h-4 w-4"/>
@@ -315,7 +329,6 @@ export default function HomePage() {
             <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-8">
               Saveetha AI is dedicated to revolutionizing healthcare access through intelligent technology. Our mission is to empower patients and support medical professionals with intuitive and efficient digital tools. We believe in a future where managing health is simpler and more informed.
             </p>
-            {/* Image Carousel for About Us would go here in a more advanced version */}
              <img src="https://placehold.co/800x400.png" alt="About Saveetha AI" data-ai-hint="hospital team" className="mx-auto rounded-lg shadow-md" />
           </div>
         </section>
@@ -338,7 +351,6 @@ export default function HomePage() {
             </p>
           </div>
         </section>
-
       </main>
       <footer className="py-8 border-t bg-background">
         <div className="container flex flex-col items-center justify-center gap-2 text-center">
