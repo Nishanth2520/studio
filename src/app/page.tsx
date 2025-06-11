@@ -157,14 +157,14 @@ export default function HomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section
-          className="relative text-center bg-cover bg-center bg-no-repeat py-24 sm:py-32"
+          className="relative text-center bg-cover bg-center bg-no-repeat py-20 sm:py-28"
           style={{ backgroundImage: "url('https://media.canva.com/v2/image-resize/format:JPG/height:300/quality:92/uri:ifs%3A%2F%2FM%2F6a4d73f6-2689-4d46-a68f-21de909896a6/watermark:F/width:500?csig=AAAAAAAAAAAAAAAAAAAAAI6VpOcWlhDuYKDROAWnCgYobO-ZjsMXBGzFUkStFSvh&exp=1747490006&osig=AAAAAAAAAAAAAAAAAAAAANJvXBO_-vSefLtXNlWlfNZwYwD-DiHvAMnIm6mgpP-O&signer=media-rpc&x-canva-quality=thumbnail_large')" }}
           data-ai-hint="abstract background"
         >
           <div className="absolute inset-0 bg-black/60"></div>
           <div className="relative z-10 container mx-auto px-4 animate-fade-in-up">
-            <div className="mb-8 inline-block">
-              <Logo size={64} />
+            <div className="mb-6 inline-block">
+              <Logo size={56} />
             </div>
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
               Intelligent Health, Simplified by Saveetha AI
@@ -176,9 +176,9 @@ export default function HomePage() {
         </section>
         
         {/* Main Features Section */}
-        <section className="py-16 sm:py-20 bg-background">
+        <section className="py-12 sm:py-16 bg-background">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-primary mb-12 sm:mb-16 animate-fade-in animation-delay-200ms">Explore Our Services</h2>
+            <h2 className="text-3xl font-bold text-center text-primary mb-10 sm:mb-12 animate-fade-in animation-delay-200ms">Explore Our Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
               
               <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105 flex flex-col animate-fade-in animation-delay-400ms">
@@ -332,10 +332,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        <Separator className="my-16" />
+        <Separator className="my-12" />
 
         {/* About Us Placeholder Section */}
-        <section className="py-12 sm:py-16 bg-secondary/30">
+        <section className="py-10 sm:py-12 bg-secondary/30">
           <div className="container mx-auto px-4 text-center animate-fade-in">
              <div className="inline-block p-3 bg-primary/10 rounded-full mb-4">
                 <Hospital className="h-10 w-10 text-primary" />
@@ -347,10 +347,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        <Separator className="my-16" />
+        <Separator className="my-12" />
         
         {/* Testimonials Placeholder Section */}
-        <section className="py-12 sm:py-16 bg-background">
+        <section className="py-10 sm:py-12 bg-background">
           <div className="container mx-auto px-4 text-center animate-fade-in">
             <div className="inline-block p-3 bg-primary/10 rounded-full mb-4">
                 <MessageSquareHeart className="h-10 w-10 text-primary" />
