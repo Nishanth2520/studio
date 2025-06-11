@@ -297,7 +297,7 @@ export default function PublicBookAppointmentPage() {
                       <FormItem className="flex flex-col">
                         <FormLabel className="mb-2 text-center md:text-left">Available Time Slots (PST)</FormLabel>
                          <FormControl>
-                            <>
+                            <div>
                               {form.getValues("appointmentDate") && availableTimes.length > 0 ? (
                                 <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
                                   {availableTimes.map(time => (
@@ -317,7 +317,7 @@ export default function PublicBookAppointmentPage() {
                                   {form.getValues("appointmentDate") ? "No slots available for this date." : "Please select a date to see available times."}
                                 </p>
                               )}
-                            </>
+                            </div>
                          </FormControl>
                         <FormMessage className="mt-2 text-center md:text-left" />
                       </FormItem>
