@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect } from 'react';
@@ -11,16 +12,17 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 export default function LoginPage() {
   const { user, role, loading } = useAuth();
   const router = useRouter();
+  const { replace } = router; // Destructure replace
 
   useEffect(() => {
     if (!loading && user) {
       if (role === 'doctor') {
-        router.replace('/doctor-dashboard');
+        replace('/doctor-dashboard');
       } else {
-        router.replace('/dashboard');
+        replace('/dashboard');
       }
     }
-  }, [user, role, loading, router]);
+  }, [user, role, loading, replace]); // Use replace in dependency array
 
   if (loading || (!loading && user)) {
     return (

@@ -31,7 +31,7 @@ import {
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -88,13 +88,11 @@ const StarRating = ({ rating, className }: { rating: number, className?: string 
 export default function HomePage() {
   const { user, role, loading } = useAuth();
   const router = useRouter();
+  const { replace } = router; // Destructure replace
   const [selectedSpecialization, setSelectedSpecialization] = useState<string>("");
   const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
   const [isDoctorDialogClientReady, setIsDoctorDialogClientReady] = useState(false);
 
-  // This effect ensures client-side specific logic runs after mount,
-  // helping prevent hydration mismatches for components like Dialog.
-  // Moved before conditional returns to respect Rules of Hooks.
   useEffect(() => {
     setIsDoctorDialogClientReady(true); 
   }, []);
@@ -103,34 +101,29 @@ export default function HomePage() {
     if (!loading) {
       if (user) {
         if (role === 'doctor') {
-          router.replace('/doctor-dashboard');
+          replace('/doctor-dashboard');
         } else if (role === 'user') {
-          router.replace('/dashboard');
+          replace('/dashboard');
         } else {
-          // This case should ideally not happen if role is set upon login.
-          // If it does, redirecting to login or a role selection page might be appropriate.
           console.warn("User authenticated but role is unclear. Redirecting to login.");
-          router.replace('/login');
+          replace('/login');
         }
       }
-      // If !user and !loading, user is not logged in, so stay on public homepage.
     }
-  }, [user, role, loading, router]);
+  }, [user, role, loading, replace]); // Use replace in dependency array
 
   useEffect(() => {
     if (selectedSpecialization) {
       const filtered = DUMMY_DOCTORS.filter(doc => doc.specialization === selectedSpecialization);
-      // Sort by rating (desc), then by experience (desc) as a tie-breaker
       const sorted = filtered.sort((a, b) => b.rating - a.rating || b.experience - a.experience);
-      setRecommendedDoctors(sorted.slice(0, 6)); // Show top 6
+      setRecommendedDoctors(sorted.slice(0, 6)); 
     } else {
-      setRecommendedDoctors([]); // Clear if no specialization selected
+      setRecommendedDoctors([]); 
     }
   }, [selectedSpecialization]);
   
 
   if (loading) { 
-    // Full screen loader if auth state is still loading
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <LoadingSpinner />
@@ -138,11 +131,7 @@ export default function HomePage() {
     );
   }
 
-  // If user is logged in (and not loading), they should have been redirected by the useEffect above.
-  // This block is a fallback, but ideally, redirection logic handles this.
   if (user && !loading) { 
-      // This might indicate a brief moment before redirection, or if redirection logic fails.
-      // Showing a loader here prevents brief flashing of homepage content for logged-in users.
       return (
         <div className="flex min-h-screen items-center justify-center bg-background">
           <LoadingSpinner />
@@ -150,35 +139,34 @@ export default function HomePage() {
       );
   }
   
-  // If we reach here, user is not logged in and auth is not loading, so show public homepage.
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-secondary/10 to-secondary/30">
       <Header />
       <main className="flex-1">
         {/* Hero Section */}
         <section
-          className="relative text-center bg-cover bg-center bg-no-repeat py-20 sm:py-28"
+          className="relative text-center bg-cover bg-center bg-no-repeat py-16 sm:py-20"
           style={{ backgroundImage: "url('https://media.canva.com/v2/image-resize/format:JPG/height:300/quality:92/uri:ifs%3A%2F%2FM%2F6a4d73f6-2689-4d46-a68f-21de909896a6/watermark:F/width:500?csig=AAAAAAAAAAAAAAAAAAAAAI6VpOcWlhDuYKDROAWnCgYobO-ZjsMXBGzFUkStFSvh&exp=1747490006&osig=AAAAAAAAAAAAAAAAAAAAANJvXBO_-vSefLtXNlWlfNZwYwD-DiHvAMnIm6mgpP-O&signer=media-rpc&x-canva-quality=thumbnail_large')" }}
           data-ai-hint="abstract background"
         >
           <div className="absolute inset-0 bg-black/60"></div>
           <div className="relative z-10 container mx-auto px-4 animate-fade-in-up">
-            <div className="mb-6 inline-block">
+            <div className="mb-4 inline-block">
               <Logo size={56} />
             </div>
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
               Intelligent Health, Simplified by Saveetha AI
             </h1>
-            <p className="mt-6 max-w-3xl mx-auto text-lg text-gray-100 sm:text-xl">
+            <p className="mt-4 max-w-3xl mx-auto text-lg text-gray-100 sm:text-xl">
               Access AI-powered symptom insights and easily schedule appointments. Your health journey, managed smarter.
             </p>
           </div>
         </section>
         
         {/* Main Features Section */}
-        <section className="py-12 sm:py-16 bg-background">
+        <section className="py-10 sm:py-12 bg-background">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-primary mb-10 sm:mb-12 animate-fade-in animation-delay-200ms">Explore Our Services</h2>
+            <h2 className="text-3xl font-bold text-center text-primary mb-8 sm:mb-10 animate-fade-in animation-delay-200ms">Explore Our Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
               
               <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105 flex flex-col animate-fade-in animation-delay-400ms">
@@ -222,7 +210,7 @@ export default function HomePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
-                  {isDoctorDialogClientReady && ( // Only render Dialog on client-side
+                  {isDoctorDialogClientReady && ( 
                     <Dialog onOpenChange={() => { setSelectedSpecialization(""); setRecommendedDoctors([]); }}>
                       <DialogTrigger asChild>
                         <Button size="lg" className="shadow-md hover:bg-primary/90 mt-2">
@@ -332,31 +320,31 @@ export default function HomePage() {
           </div>
         </section>
 
-        <Separator className="my-12" />
+        <Separator className="my-8" />
 
         {/* About Us Placeholder Section */}
-        <section className="py-10 sm:py-12 bg-secondary/30">
+        <section className="py-8 sm:py-10 bg-secondary/30">
           <div className="container mx-auto px-4 text-center animate-fade-in">
              <div className="inline-block p-3 bg-primary/10 rounded-full mb-4">
                 <Hospital className="h-10 w-10 text-primary" />
               </div>
-            <h2 className="text-3xl font-bold text-primary mb-6">About Saveetha AI</h2>
-            <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-8">
+            <h2 className="text-3xl font-bold text-primary mb-4">About Saveetha AI</h2>
+            <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-6">
               Saveetha AI is dedicated to revolutionizing healthcare access through intelligent technology. Our mission is to empower patients and support medical professionals with intuitive and efficient digital tools. We believe in a future where managing health is simpler and more informed.
             </p>
           </div>
         </section>
 
-        <Separator className="my-12" />
+        <Separator className="my-8" />
         
         {/* Testimonials Placeholder Section */}
-        <section className="py-10 sm:py-12 bg-background">
+        <section className="py-8 sm:py-10 bg-background">
           <div className="container mx-auto px-4 text-center animate-fade-in">
             <div className="inline-block p-3 bg-primary/10 rounded-full mb-4">
                 <MessageSquareHeart className="h-10 w-10 text-primary" />
             </div>
-            <h2 className="text-3xl font-bold text-primary mb-6">What Our Users Say</h2>
-            <div className="max-w-3xl mx-auto text-lg text-muted-foreground mb-8">
+            <h2 className="text-3xl font-bold text-primary mb-4">What Our Users Say</h2>
+            <div className="max-w-3xl mx-auto text-lg text-muted-foreground mb-6">
               <p className="italic">"Saveetha AI made it so easy to understand my symptoms and find a doctor. A truly helpful platform!"</p>
               <p className="mt-2 text-sm font-semibold">- A. User</p>
             </div>
@@ -380,4 +368,3 @@ export default function HomePage() {
     </div>
   );
 }
-
