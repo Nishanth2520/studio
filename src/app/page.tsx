@@ -31,7 +31,6 @@ import {
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
@@ -88,7 +87,7 @@ const StarRating = ({ rating, className }: { rating: number, className?: string 
 export default function HomePage() {
   const { user, role, loading } = useAuth();
   const router = useRouter();
-  const { replace } = router;
+  const { replace, push } = router;
   const [selectedSpecialization, setSelectedSpecialization] = useState<string>("");
   const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
   const [isDoctorDialogClientReady, setIsDoctorDialogClientReady] = useState(false);
@@ -115,7 +114,7 @@ export default function HomePage() {
       }
       // If !user, no redirect happens here, allowing public homepage access.
     }
-  }, [user, role, loading, replace]); // Added router.replace to dependencies
+  }, [user, role, loading, replace]);
 
   useEffect(() => {
     if (selectedSpecialization) {
@@ -155,33 +154,33 @@ export default function HomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section
-          className="relative text-center bg-cover bg-center bg-no-repeat py-12 sm:py-16"
+          className="relative text-center bg-cover bg-center bg-no-repeat py-10 sm:py-12"
           style={{ backgroundImage: "url('https://media.canva.com/v2/image-resize/format:JPG/height:300/quality:92/uri:ifs%3A%2F%2FM%2F6a4d73f6-2689-4d46-a68f-21de909896a6/watermark:F/width:500?csig=AAAAAAAAAAAAAAAAAAAAAI6VpOcWlhDuYKDROAWnCgYobO-ZjsMXBGzFUkStFSvh&exp=1747490006&osig=AAAAAAAAAAAAAAAAAAAAANJvXBO_-vSefLtXNlWlfNZwYwD-DiHvAMnIm6mgpP-O&signer=media-rpc&x-canva-quality=thumbnail_large')" }}
           data-ai-hint="abstract background"
         >
           <div className="absolute inset-0 bg-black/60"></div>
           <div className="relative z-10 container mx-auto px-4 animate-fade-in-up">
-            <div className="mb-3 inline-block">
-              <Logo size={52} />
+            <div className="mb-2 inline-block">
+              <Logo size={48} />
             </div>
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl md:text-6xl">
               Intelligent Health, Simplified by Saveetha AI
             </h1>
-            <p className="mt-3 max-w-3xl mx-auto text-lg text-gray-100 sm:text-xl">
+            <p className="mt-2 max-w-3xl mx-auto text-lg text-gray-100 sm:text-xl">
               Access AI-powered symptom insights and easily schedule appointments. Your health journey, managed smarter.
             </p>
           </div>
         </section>
         
         {/* Main Features Section */}
-        <section className="py-8 sm:py-10 bg-background">
+        <section className="py-6 sm:py-8 bg-background">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-primary mb-6 sm:mb-8 animate-fade-in animation-delay-200ms">Explore Our Services</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10">
+            <h2 className="text-3xl font-bold text-center text-primary mb-4 sm:mb-6 animate-fade-in animation-delay-200ms">Explore Our Services</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               
               <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105 flex flex-col animate-fade-in animation-delay-400ms">
                 <CardHeader className="items-center text-center">
-                  <div className="p-3 bg-primary/10 rounded-full mb-3">
+                  <div className="p-3 bg-primary/10 rounded-full mb-2">
                     <MessageCircleQuestion className="h-10 w-10 text-primary" />
                   </div>
                   <CardTitle className="text-2xl">AI Symptom Helper</CardTitle>
@@ -192,7 +191,7 @@ export default function HomePage() {
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
                    <Dialog>
                     <DialogTrigger asChild>
-                      <Button size="lg" className="shadow-md hover:bg-primary/90 mt-2">
+                      <Button size="lg" className="shadow-md hover:bg-primary/90 mt-1">
                         <Zap className="mr-2 h-5 w-5" />
                         Ask our AI
                       </Button>
@@ -202,7 +201,7 @@ export default function HomePage() {
                     </DialogContent>
                   </Dialog>
                 </CardContent>
-                <CardFooter className="justify-center text-center pt-4">
+                <CardFooter className="justify-center text-center pt-3">
                   <p className="text-xs text-muted-foreground">
                     For full features and history, please <Link href="/login" className="underline text-primary hover:text-primary/80">login or create an account</Link>.
                   </p>
@@ -211,7 +210,7 @@ export default function HomePage() {
 
               <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105 flex flex-col animate-fade-in animation-delay-600ms">
                 <CardHeader className="items-center text-center">
-                   <div className="p-3 bg-primary/10 rounded-full mb-3">
+                   <div className="p-3 bg-primary/10 rounded-full mb-2">
                     <CalendarPlus className="h-10 w-10 text-primary" />
                   </div>
                   <CardTitle className="text-2xl">Schedule a Consultation</CardTitle>
@@ -223,7 +222,7 @@ export default function HomePage() {
                   {isDoctorDialogClientReady && ( 
                     <Dialog onOpenChange={() => { setSelectedSpecialization(""); setRecommendedDoctors([]); }}>
                       <DialogTrigger asChild>
-                        <Button size="lg" className="shadow-md hover:bg-primary/90 mt-2">
+                        <Button size="lg" className="shadow-md hover:bg-primary/90 mt-1">
                           <Zap className="mr-2 h-5 w-5" />
                           Find a Doctor
                         </Button>
@@ -264,7 +263,6 @@ export default function HomePage() {
                           {recommendedDoctors.length > 0 && (
                             <div className="space-y-4">
                               <h3 className="text-lg font-semibold text-center text-primary">Recommended Doctors for {selectedSpecialization}</h3>
-                              <ScrollArea className="max-h-[45vh] pr-3">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   {recommendedDoctors.map(doc => (
                                     <Card key={doc.id} className="shadow-md hover:shadow-lg transition-shadow flex flex-col">
@@ -297,7 +295,7 @@ export default function HomePage() {
                                             className="w-full" 
                                             type="button" 
                                             onClick={() => {
-                                                router.push(`/book-appointment?doctorId=${doc.id}`);
+                                                push(`/book-appointment?doctorId=${doc.id}`);
                                             }}
                                         >
                                             <CalendarPlus className="mr-2 h-4 w-4"/>
@@ -307,7 +305,6 @@ export default function HomePage() {
                                     </Card>
                                   ))}
                                 </div>
-                              </ScrollArea>
                             </div>
                           )}
                         </div>
@@ -320,7 +317,7 @@ export default function HomePage() {
                     </Dialog>
                   )}
                 </CardContent>
-                <CardFooter className="justify-center text-center pt-4">
+                <CardFooter className="justify-center text-center pt-3">
                    <p className="text-xs text-muted-foreground">
                     Registered users can access full booking management. <Link href="/login" className="underline text-primary hover:text-primary/80">Login or sign up</Link>.
                   </p>
@@ -330,33 +327,33 @@ export default function HomePage() {
           </div>
         </section>
 
-        <Separator className="my-6" />
+        <Separator className="my-4" />
 
         {/* About Us Placeholder Section */}
-        <section className="py-6 sm:py-8 bg-secondary/30">
+        <section className="py-4 sm:py-6 bg-secondary/30">
           <div className="container mx-auto px-4 text-center animate-fade-in">
-             <div className="inline-block p-3 bg-primary/10 rounded-full mb-3">
+             <div className="inline-block p-3 bg-primary/10 rounded-full mb-2">
                 <Hospital className="h-10 w-10 text-primary" />
               </div>
-            <h2 className="text-3xl font-bold text-primary mb-3">About Saveetha AI</h2>
-            <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-4">
+            <h2 className="text-3xl font-bold text-primary mb-2">About Saveetha AI</h2>
+            <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-3">
               Saveetha AI is dedicated to revolutionizing healthcare access through intelligent technology. Our mission is to empower patients and support medical professionals with intuitive and efficient digital tools. We believe in a future where managing health is simpler and more informed.
             </p>
           </div>
         </section>
 
-        <Separator className="my-6" />
+        <Separator className="my-4" />
         
         {/* Testimonials Placeholder Section */}
-        <section className="py-6 sm:py-8 bg-background">
+        <section className="py-4 sm:py-6 bg-background">
           <div className="container mx-auto px-4 text-center animate-fade-in">
-            <div className="inline-block p-3 bg-primary/10 rounded-full mb-3">
+            <div className="inline-block p-3 bg-primary/10 rounded-full mb-2">
                 <MessageSquareHeart className="h-10 w-10 text-primary" />
             </div>
-            <h2 className="text-3xl font-bold text-primary mb-3">What Our Users Say</h2>
-            <div className="max-w-3xl mx-auto text-lg text-muted-foreground mb-4">
+            <h2 className="text-3xl font-bold text-primary mb-2">What Our Users Say</h2>
+            <div className="max-w-3xl mx-auto text-lg text-muted-foreground mb-3">
               <p className="italic">"Saveetha AI made it so easy to understand my symptoms and find a doctor. A truly helpful platform!"</p>
-              <p className="mt-2 text-sm font-semibold">- A. User</p>
+              <p className="mt-1 text-sm font-semibold">- A. User</p>
             </div>
             <p className="text-sm text-muted-foreground">
               (More testimonials would be displayed in a sliding carousel here.)
@@ -364,9 +361,9 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-      <footer className="py-8 border-t bg-background">
-        <div className="container flex flex-col items-center justify-center gap-2 text-center">
-          <Logo size={24} />
+      <footer className="py-6 border-t bg-background">
+        <div className="container flex flex-col items-center justify-center gap-1 text-center">
+          <Logo size={22} />
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} Saveetha AI. Your health, intelligently managed.
           </p>
