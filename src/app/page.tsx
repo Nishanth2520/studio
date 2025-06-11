@@ -32,6 +32,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { cn } from "@/lib/utils";
 
 interface Doctor {
   id: string;
@@ -87,7 +88,7 @@ export default function HomePage() {
   const router = useRouter();
   const [selectedSpecialization, setSelectedSpecialization] = useState<string>("");
   const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
-  const [isDoctorDialogValid, setIsDoctorDialogValid] = useState(true);
+  const [isDoctorDialogVald, setIsDoctorDialogValid] = useState(true); // Renamed to avoid conflict if a global isDoctorDialogValid existed, though unlikely.
 
 
   useEffect(() => {
@@ -114,6 +115,13 @@ export default function HomePage() {
       setRecommendedDoctors([]);
     }
   }, [selectedSpecialization]);
+  
+  // This effect ensures the dialog doesn't try to render on the server, or that client-side specific logic runs on mount.
+  // Moved before conditional returns to adhere to Rules of Hooks.
+  useEffect(() => {
+    setIsDoctorDialogValid(true);
+  }, []);
+
 
   if (loading) { 
     return (
@@ -131,12 +139,6 @@ export default function HomePage() {
       );
   }
   
-  // This effect ensures the dialog doesn't try to render on the server.
-  // It can help prevent hydration errors with complex dialogs.
-  useEffect(() => {
-    setIsDoctorDialogValid(true);
-  }, []);
-
 
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-secondary/10 to-secondary/30">
@@ -209,7 +211,7 @@ export default function HomePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
-                  {isDoctorDialogValid && (
+                  {isDoctorDialogVald && (
                     <Dialog onOpenChange={() => { setSelectedSpecialization(""); setRecommendedDoctors([]); }}>
                       <DialogTrigger asChild>
                         <Button size="lg" className="shadow-md hover:bg-primary/90 mt-2">
@@ -225,7 +227,7 @@ export default function HomePage() {
                           </DialogDescription>
                         </DialogHeader>
                         <div className="py-4 space-y-6">
-                          <Select onValueChange={setSelectedSpecialization} defaultValue={selectedSpecialization}>
+                          <Select onValueChange={setSelectedSpecialization} value={selectedSpecialization}>
                             <SelectTrigger className="w-full sm:w-[300px] mx-auto">
                               <SelectValue placeholder="Select a Specialization" />
                             </SelectTrigger>
@@ -282,7 +284,7 @@ export default function HomePage() {
                             </div>
                           )}
                         </div>
-                        <DialogFooter>
+                         <DialogFooter>
                            <DialogClose asChild>
                              <Button variant="outline">Close</Button>
                            </DialogClose>
