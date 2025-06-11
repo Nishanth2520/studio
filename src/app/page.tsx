@@ -44,27 +44,28 @@ interface Doctor {
   rating: number; // 0-5
   avatar: string;
   dataAiHint: string;
+  bio?: string; // Added for booking page
 }
 
 const DUMMY_DOCTORS: Doctor[] = [
-  { id: 'doc1', name: 'Dr. Emily Carter', age: 45, experience: 15, specialization: 'Cardiology', rating: 4.5, avatar: 'https://placehold.co/100x100.png?text=EC', dataAiHint: 'doctor woman' },
-  { id: 'doc2', name: 'Dr. Johnathan Lee', age: 52, experience: 20, specialization: 'Pediatrics', rating: 5, avatar: 'https://placehold.co/100x100.png?text=JL', dataAiHint: 'doctor man' },
-  { id: 'doc3', name: 'Dr. Sarah Green', age: 38, experience: 10, specialization: 'Dermatology', rating: 4.2, avatar: 'https://placehold.co/100x100.png?text=SG', dataAiHint: 'doctor portrait' },
-  { id: 'doc4', name: 'Dr. Michael Brown', age: 48, experience: 18, specialization: 'Cardiology', rating: 4.8, avatar: 'https://placehold.co/100x100.png?text=MB', dataAiHint: 'doctor male' },
-  { id: 'doc5', name: 'Dr. Linda White', age: 55, experience: 25, specialization: 'Cardiology', rating: 4.9, avatar: 'https://placehold.co/100x100.png?text=LW', dataAiHint: 'doctor senior' },
-  { id: 'doc6', name: 'Dr. Kevin Harris', age: 42, experience: 12, specialization: 'Pulmonology', rating: 4.3, avatar: 'https://placehold.co/100x100.png?text=KH', dataAiHint: 'doctor medical' },
-  { id: 'doc7', name: 'Dr. Jessica Davis', age: 39, experience: 9, specialization: 'Pulmonology', rating: 4.0, avatar: 'https://placehold.co/100x100.png?text=JD', dataAiHint: 'doctor female' },
-  { id: 'doc8', name: 'Dr. Brian Wilson', age: 60, experience: 30, specialization: 'Cardiology', rating: 5, avatar: 'https://placehold.co/100x100.png?text=BW', dataAiHint: 'doctor experienced' },
-  { id: 'doc9', name: 'Dr. Olivia Martinez', age: 41, experience: 13, specialization: 'Dermatology', rating: 4.6, avatar: 'https://placehold.co/100x100.png?text=OM', dataAiHint: 'doctor skin' },
-  { id: 'doc10', name: 'Dr. David Rodriguez', age: 47, experience: 17, specialization: 'Pediatrics', rating: 4.7, avatar: 'https://placehold.co/100x100.png?text=DR', dataAiHint: 'doctor children' },
-  { id: 'doc11', name: 'Dr. Sophia Miller', age: 35, experience: 8, specialization: 'Cardiology', rating: 4.1, avatar: 'https://placehold.co/100x100.png?text=SM', dataAiHint: 'heart specialist' },
-  { id: 'doc12', name: 'Dr. James Anderson', age: 50, experience: 22, specialization: 'Pulmonology', rating: 4.8, avatar: 'https://placehold.co/100x100.png?text=JA', dataAiHint: 'doctor lungs' },
-  { id: 'doc13', name: 'Dr. Ava Thomas', age: 43, experience: 14, specialization: 'Cardiology', rating: 4.3, avatar: 'https://placehold.co/100x100.png?text=AT', dataAiHint: 'professional doctor' },
-  { id: 'doc14', name: 'Dr. Noah Jackson', age: 37, experience: 9, specialization: 'Pediatrics', rating: 4.4, avatar: 'https://placehold.co/100x100.png?text=NJ', dataAiHint: 'young doctor' },
-  { id: 'doc15', name: 'Dr. Isabella White', age: 51, experience: 19, specialization: 'Dermatology', rating: 4.9, avatar: 'https://placehold.co/100x100.png?text=IW', dataAiHint: 'female specialist' },
-  { id: 'doc16', name: 'Dr. Lucas Harris', age: 46, experience: 16, specialization: 'Pulmonology', rating: 4.5, avatar: 'https://placehold.co/100x100.png?text=LH', dataAiHint: 'experienced male' },
-  { id: 'doc17', name: 'Dr. Mia Martin', age: 40, experience: 11, specialization: 'Pediatrics', rating: 4.6, avatar: 'https://placehold.co/100x100.png?text=MM', dataAiHint: 'kind doctor' },
-  { id: 'doc18', name: 'Dr. Ethan Thompson', age: 53, experience: 23, specialization: 'Dermatology', rating: 4.7, avatar: 'https://placehold.co/100x100.png?text=ET', dataAiHint: 'professional male' },
+  { id: 'doc1', name: 'Dr. Emily Carter', age: 45, experience: 15, specialization: 'Cardiology', rating: 4.5, avatar: 'https://placehold.co/100x100.png?text=EC', dataAiHint: 'doctor woman', bio: 'Dr. Carter is a renowned cardiologist with 15 years of experience in treating complex heart conditions.' },
+  { id: 'doc2', name: 'Dr. Johnathan Lee', age: 52, experience: 20, specialization: 'Pediatrics', rating: 5, avatar: 'https://placehold.co/100x100.png?text=JL', dataAiHint: 'doctor man', bio: 'Dr. Lee is a highly-rated pediatrician dedicated to children\'s health and well-being.' },
+  { id: 'doc3', name: 'Dr. Sarah Green', age: 38, experience: 10, specialization: 'Dermatology', rating: 4.2, avatar: 'https://placehold.co/100x100.png?text=SG', dataAiHint: 'doctor portrait', bio: 'Dr. Green specializes in dermatological conditions, offering expert care for skin health.' },
+  { id: 'doc4', name: 'Dr. Michael Brown', age: 48, experience: 18, specialization: 'Cardiology', rating: 4.8, avatar: 'https://placehold.co/100x100.png?text=MB', dataAiHint: 'doctor male', bio: 'Dr. Brown is a leading cardiologist known for his patient-centric approach.' },
+  { id: 'doc5', name: 'Dr. Linda White', age: 55, experience: 25, specialization: 'Cardiology', rating: 4.9, avatar: 'https://placehold.co/100x100.png?text=LW', dataAiHint: 'doctor senior', bio: 'With 25 years in cardiology, Dr. White brings extensive expertise to her practice.' },
+  { id: 'doc6', name: 'Dr. Kevin Harris', age: 42, experience: 12, specialization: 'Pulmonology', rating: 4.3, avatar: 'https://placehold.co/100x100.png?text=KH', dataAiHint: 'doctor medical', bio: 'Dr. Harris focuses on respiratory illnesses and lung health.' },
+  { id: 'doc7', name: 'Dr. Jessica Davis', age: 39, experience: 9, specialization: 'Pulmonology', rating: 4.0, avatar: 'https://placehold.co/100x100.png?text=JD', dataAiHint: 'doctor female', bio: 'Dr. Davis is committed to providing comprehensive pulmonology care.' },
+  { id: 'doc8', name: 'Dr. Brian Wilson', age: 60, experience: 30, specialization: 'Cardiology', rating: 5, avatar: 'https://placehold.co/100x100.png?text=BW', dataAiHint: 'doctor experienced', bio: 'Dr. Wilson is a top cardiologist with three decades of experience in advanced heart care.' },
+  { id: 'doc9', name: 'Dr. Olivia Martinez', age: 41, experience: 13, specialization: 'Dermatology', rating: 4.6, avatar: 'https://placehold.co/100x100.png?text=OM', dataAiHint: 'doctor skin', bio: 'Dr. Martinez offers expert dermatological treatments and cosmetic procedures.' },
+  { id: 'doc10', name: 'Dr. David Rodriguez', age: 47, experience: 17, specialization: 'Pediatrics', rating: 4.7, avatar: 'https://placehold.co/100x100.png?text=DR', dataAiHint: 'doctor children', bio: 'Dr. Rodriguez provides compassionate pediatric care for infants, children, and adolescents.' },
+  { id: 'doc11', name: 'Dr. Sophia Miller', age: 35, experience: 8, specialization: 'Cardiology', rating: 4.1, avatar: 'https://placehold.co/100x100.png?text=SM', dataAiHint: 'heart specialist', bio: 'Dr. Miller is a rising cardiologist with a focus on preventative heart health.' },
+  { id: 'doc12', name: 'Dr. James Anderson', age: 50, experience: 22, specialization: 'Pulmonology', rating: 4.8, avatar: 'https://placehold.co/100x100.png?text=JA', dataAiHint: 'doctor lungs', bio: 'Dr. Anderson is a respected pulmonologist with extensive experience in lung diseases.' },
+  { id: 'doc13', name: 'Dr. Ava Thomas', age: 43, experience: 14, specialization: 'Cardiology', rating: 4.3, avatar: 'https://placehold.co/100x100.png?text=AT', dataAiHint: 'professional doctor', bio: 'Dr. Thomas provides expert cardiac care with a focus on patient education.' },
+  { id: 'doc14', name: 'Dr. Noah Jackson', age: 37, experience: 9, specialization: 'Pediatrics', rating: 4.4, avatar: 'https://placehold.co/100x100.png?text=NJ', dataAiHint: 'young doctor', bio: 'Dr. Jackson is a dedicated pediatrician known for his friendly approach with children.' },
+  { id: 'doc15', name: 'Dr. Isabella White', age: 51, experience: 19, specialization: 'Dermatology', rating: 4.9, avatar: 'https://placehold.co/100x100.png?text=IW', dataAiHint: 'female specialist', bio: 'Dr. White is a leading dermatologist specializing in advanced skin treatments.' },
+  { id: 'doc16', name: 'Dr. Lucas Harris', age: 46, experience: 16, specialization: 'Pulmonology', rating: 4.5, avatar: 'https://placehold.co/100x100.png?text=LH', dataAiHint: 'experienced male', bio: 'Dr. Harris provides comprehensive care for all types of respiratory conditions.' },
+  { id: 'doc17', name: 'Dr. Mia Martin', age: 40, experience: 11, specialization: 'Pediatrics', rating: 4.6, avatar: 'https://placehold.co/100x100.png?text=MM', dataAiHint: 'kind doctor', bio: 'Dr. Martin is a compassionate pediatrician with a focus on holistic child health.' },
+  { id: 'doc18', name: 'Dr. Ethan Thompson', age: 53, experience: 23, specialization: 'Dermatology', rating: 4.7, avatar: 'https://placehold.co/100x100.png?text=ET', dataAiHint: 'professional male', bio: 'Dr. Thompson is an experienced dermatologist offering a wide range of skin care services.' },
 ];
 
 const SPECIALIZATIONS = Array.from(new Set(DUMMY_DOCTORS.map(doc => doc.specialization))).sort();
@@ -90,7 +91,6 @@ export default function HomePage() {
   const [selectedSpecialization, setSelectedSpecialization] = useState<string>("");
   const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
   const [isDoctorDialogClientReady, setIsDoctorDialogClientReady] = useState(false);
-
 
   useEffect(() => {
     // This effect ensures client-side specific logic runs after mount,
@@ -148,7 +148,7 @@ export default function HomePage() {
         <section
           className="relative text-center bg-cover bg-center bg-no-repeat py-24 sm:py-32"
           style={{ backgroundImage: "url('https://media.canva.com/v2/image-resize/format:JPG/height:300/quality:92/uri:ifs%3A%2F%2FM%2F6a4d73f6-2689-4d46-a68f-21de909896a6/watermark:F/width:500?csig=AAAAAAAAAAAAAAAAAAAAAI6VpOcWlhDuYKDROAWnCgYobO-ZjsMXBGzFUkStFSvh&exp=1747490006&osig=AAAAAAAAAAAAAAAAAAAAANJvXBO_-vSefLtXNlWlfNZwYwD-DiHvAMnIm6mgpP-O&signer=media-rpc&x-canva-quality=thumbnail_large')" }}
-          data-ai-hint="blue texture"
+          data-ai-hint="abstract background"
         >
           <div className="absolute inset-0 bg-black/60"></div>
           <div className="relative z-10 container mx-auto px-4 animate-fade-in-up">
@@ -285,7 +285,7 @@ export default function HomePage() {
                                       </CardContent>
                                       <CardFooter className="p-4 pt-2 mt-auto">
                                         <DialogClose asChild>
-                                          <Button className="w-full" onClick={() => router.push('/book-appointment')}>
+                                          <Button className="w-full" onClick={() => router.push(`/book-appointment?doctorId=${doc.id}`)}>
                                             <CalendarPlus className="mr-2 h-4 w-4"/>
                                             Book Appointment
                                           </Button>
