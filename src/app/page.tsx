@@ -295,14 +295,11 @@ export default function HomePage() {
                                         </div>
                                       </CardContent>
                                       <CardFooter className="p-4 pt-2 mt-auto">
-                                        {/* This button now closes the dialog and navigates */}
                                         <Button 
                                             className="w-full" 
                                             type="button" 
                                             onClick={() => {
                                                 router.push(`/book-appointment?doctorId=${doc.id}`);
-                                                // Note: The DialogClose is removed as navigation handles closing implicitly
-                                                // If we wanted to keep DialogClose, we'd wrap this Button in it.
                                             }}
                                         >
                                             <CalendarPlus className="mr-2 h-4 w-4"/>
@@ -347,7 +344,7 @@ export default function HomePage() {
             <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-8">
               Saveetha AI is dedicated to revolutionizing healthcare access through intelligent technology. Our mission is to empower patients and support medical professionals with intuitive and efficient digital tools. We believe in a future where managing health is simpler and more informed.
             </p>
-             <img src="https://placehold.co/800x400.png" alt="About Saveetha AI" data-ai-hint="hospital building" className="mx-auto rounded-lg shadow-md" />
+             <img src="https://placehold.co/800x400.png" alt="About Saveetha AI" data-ai-hint="Saveetha University" className="mx-auto rounded-lg shadow-md" />
           </div>
         </section>
 
@@ -384,3 +381,4 @@ export default function HomePage() {
     </div>
   );
 }
+
