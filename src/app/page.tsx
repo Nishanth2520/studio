@@ -44,7 +44,7 @@ interface Doctor {
   rating: number; // 0-5
   avatar: string;
   dataAiHint: string;
-  bio?: string; // Added for booking page
+  bio?: string; 
 }
 
 const DUMMY_DOCTORS: Doctor[] = [
@@ -92,9 +92,10 @@ export default function HomePage() {
   const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
   const [isDoctorDialogClientReady, setIsDoctorDialogClientReady] = useState(false);
 
+  // This effect ensures client-side specific logic runs after mount,
+  // helping prevent hydration mismatches for components like Dialog.
+  // Moved before conditional returns to respect Rules of Hooks.
   useEffect(() => {
-    // This effect ensures client-side specific logic runs after mount,
-    // helping prevent hydration mismatches for components like Dialog.
     setIsDoctorDialogClientReady(true); 
   }, []);
 
@@ -106,25 +107,30 @@ export default function HomePage() {
         } else if (role === 'user') {
           router.replace('/dashboard');
         } else {
+          // This case should ideally not happen if role is set upon login.
+          // If it does, redirecting to login or a role selection page might be appropriate.
           console.warn("User authenticated but role is unclear. Redirecting to login.");
           router.replace('/login');
         }
       }
+      // If !user and !loading, user is not logged in, so stay on public homepage.
     }
   }, [user, role, loading, router]);
 
   useEffect(() => {
     if (selectedSpecialization) {
       const filtered = DUMMY_DOCTORS.filter(doc => doc.specialization === selectedSpecialization);
+      // Sort by rating (desc), then by experience (desc) as a tie-breaker
       const sorted = filtered.sort((a, b) => b.rating - a.rating || b.experience - a.experience);
-      setRecommendedDoctors(sorted.slice(0, 6));
+      setRecommendedDoctors(sorted.slice(0, 6)); // Show top 6
     } else {
-      setRecommendedDoctors([]);
+      setRecommendedDoctors([]); // Clear if no specialization selected
     }
   }, [selectedSpecialization]);
   
 
   if (loading) { 
+    // Full screen loader if auth state is still loading
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <LoadingSpinner />
@@ -132,7 +138,11 @@ export default function HomePage() {
     );
   }
 
+  // If user is logged in (and not loading), they should have been redirected by the useEffect above.
+  // This block is a fallback, but ideally, redirection logic handles this.
   if (user && !loading) { 
+      // This might indicate a brief moment before redirection, or if redirection logic fails.
+      // Showing a loader here prevents brief flashing of homepage content for logged-in users.
       return (
         <div className="flex min-h-screen items-center justify-center bg-background">
           <LoadingSpinner />
@@ -140,6 +150,7 @@ export default function HomePage() {
       );
   }
   
+  // If we reach here, user is not logged in and auth is not loading, so show public homepage.
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-secondary/10 to-secondary/30">
       <Header />
@@ -211,7 +222,7 @@ export default function HomePage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow flex flex-col justify-center items-center text-center">
-                  {isDoctorDialogClientReady && (
+                  {isDoctorDialogClientReady && ( // Only render Dialog on client-side
                     <Dialog onOpenChange={() => { setSelectedSpecialization(""); setRecommendedDoctors([]); }}>
                       <DialogTrigger asChild>
                         <Button size="lg" className="shadow-md hover:bg-primary/90 mt-2">
@@ -284,12 +295,19 @@ export default function HomePage() {
                                         </div>
                                       </CardContent>
                                       <CardFooter className="p-4 pt-2 mt-auto">
-                                        <DialogClose asChild>
-                                          <Button className="w-full" onClick={() => router.push(`/book-appointment?doctorId=${doc.id}`)}>
+                                        {/* This button now closes the dialog and navigates */}
+                                        <Button 
+                                            className="w-full" 
+                                            type="button" 
+                                            onClick={() => {
+                                                router.push(`/book-appointment?doctorId=${doc.id}`);
+                                                // Note: The DialogClose is removed as navigation handles closing implicitly
+                                                // If we wanted to keep DialogClose, we'd wrap this Button in it.
+                                            }}
+                                        >
                                             <CalendarPlus className="mr-2 h-4 w-4"/>
                                             Book Appointment
-                                          </Button>
-                                        </DialogClose>
+                                        </Button>
                                       </CardFooter>
                                     </Card>
                                   ))}
@@ -329,7 +347,7 @@ export default function HomePage() {
             <p className="max-w-3xl mx-auto text-lg text-muted-foreground mb-8">
               Saveetha AI is dedicated to revolutionizing healthcare access through intelligent technology. Our mission is to empower patients and support medical professionals with intuitive and efficient digital tools. We believe in a future where managing health is simpler and more informed.
             </p>
-             <img src="https://placehold.co/800x400.png" alt="About Saveetha AI" data-ai-hint="hospital team" className="mx-auto rounded-lg shadow-md" />
+             <img src="https://placehold.co/800x400.png" alt="About Saveetha AI" data-ai-hint="hospital building" className="mx-auto rounded-lg shadow-md" />
           </div>
         </section>
 
