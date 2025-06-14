@@ -28,7 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle as UICardTitle } from '@/components/ui/card'; // Renamed CardTitle to avoid conflict
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -92,8 +92,6 @@ export default function HomePage() {
   const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
   const [isDoctorDialogClientReady, setIsDoctorDialogClientReady] = useState(false);
 
-  // This effect ensures the dialog doesn't try to render on the server.
-  // It can help prevent hydration errors with complex dialogs.
   useEffect(() => {
     setIsDoctorDialogClientReady(true); 
   }, []);
@@ -106,29 +104,25 @@ export default function HomePage() {
         } else if (role === 'user') {
           replace('/dashboard');
         } else {
-          // This case should ideally not happen if roles are managed correctly.
-          // Consider a default redirect or an error message.
           console.warn("User authenticated but role is unclear. Redirecting to login.");
           replace('/login');
         }
       }
-      // If !user, no redirect happens here, allowing public homepage access.
     }
   }, [user, role, loading, replace]);
 
   useEffect(() => {
     if (selectedSpecialization) {
       const filtered = DUMMY_DOCTORS.filter(doc => doc.specialization === selectedSpecialization);
-      // Sort by rating (desc), then by experience (desc) as a tie-breaker
       const sorted = filtered.sort((a, b) => b.rating - a.rating || b.experience - a.experience);
-      setRecommendedDoctors(sorted.slice(0, 6)); // Take top 6
+      setRecommendedDoctors(sorted.slice(0, 6));
     } else {
-      setRecommendedDoctors([]); // Clear if no specialization is selected
+      setRecommendedDoctors([]);
     }
   }, [selectedSpecialization]);
   
 
-  if (loading) { // Show loading spinner if auth state is still loading
+  if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <LoadingSpinner />
@@ -136,9 +130,6 @@ export default function HomePage() {
     );
   }
 
-  // If user is logged in and not loading, the useEffect above should have redirected.
-  // If we reach here and user is logged in, it means redirection logic is still pending or failed.
-  // A spinner here prevents brief flash of homepage content before redirect.
   if (user && !loading) { 
       return (
         <div className="flex min-h-screen items-center justify-center bg-background">
@@ -147,14 +138,12 @@ export default function HomePage() {
       );
   }
   
-  // If no user and not loading, show the public homepage:
   return (
     <div className="flex min-h-screen flex-col bg-gradient-to-b from-background via-secondary/10 to-secondary/30">
       <Header />
       <main className="flex-1">
-        {/* Hero Section */}
         <section
-          className="relative text-center bg-cover bg-center bg-no-repeat py-10 sm:py-12"
+          className="relative text-center bg-cover bg-center bg-no-repeat py-8 sm:py-10"
           style={{ backgroundImage: "url('https://media.canva.com/v2/image-resize/format:JPG/height:300/quality:92/uri:ifs%3A%2F%2FM%2F6a4d73f6-2689-4d46-a68f-21de909896a6/watermark:F/width:500?csig=AAAAAAAAAAAAAAAAAAAAAI6VpOcWlhDuYKDROAWnCgYobO-ZjsMXBGzFUkStFSvh&exp=1747490006&osig=AAAAAAAAAAAAAAAAAAAAANJvXBO_-vSefLtXNlWlfNZwYwD-DiHvAMnIm6mgpP-O&signer=media-rpc&x-canva-quality=thumbnail_large')" }}
           data-ai-hint="abstract background"
         >
@@ -172,10 +161,9 @@ export default function HomePage() {
           </div>
         </section>
         
-        {/* Main Features Section */}
-        <section className="py-6 sm:py-8 bg-background">
+        <section className="py-4 sm:py-6 bg-background">
           <div className="container mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center text-primary mb-4 sm:mb-6 animate-fade-in animation-delay-200ms">Explore Our Services</h2>
+            <h2 className="text-3xl font-bold text-center text-primary mb-3 sm:mb-4 animate-fade-in animation-delay-200ms">Explore Our Services</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
               
               <Card className="shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-105 flex flex-col animate-fade-in animation-delay-400ms">
@@ -183,7 +171,7 @@ export default function HomePage() {
                   <div className="p-3 bg-primary/10 rounded-full mb-2">
                     <MessageCircleQuestion className="h-10 w-10 text-primary" />
                   </div>
-                  <CardTitle className="text-2xl">AI Symptom Helper</CardTitle>
+                  <UICardTitle className="text-2xl">AI Symptom Helper</UICardTitle>
                   <CardDescription className="text-base">
                     Get AI-driven insights on your symptoms. Fast, informative, and guiding you towards professional medical advice.
                   </CardDescription>
@@ -196,8 +184,16 @@ export default function HomePage() {
                         Ask our AI
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[650px] p-0">
-                      <Chatbot />
+                    <DialogContent className="sm:max-w-[650px]">
+                      <DialogHeader>
+                        <DialogTitle>AI Symptom Helper</DialogTitle>
+                        <DialogDescription>
+                          Describe your symptoms to our AI. Please note this is for informational purposes and not a medical diagnosis.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="mt-4">
+                        <Chatbot />
+                      </div>
                     </DialogContent>
                   </Dialog>
                 </CardContent>
@@ -213,7 +209,7 @@ export default function HomePage() {
                    <div className="p-3 bg-primary/10 rounded-full mb-2">
                     <CalendarPlus className="h-10 w-10 text-primary" />
                   </div>
-                  <CardTitle className="text-2xl">Schedule a Consultation</CardTitle>
+                  <UICardTitle className="text-2xl">Schedule a Consultation</UICardTitle>
                   <CardDescription className="text-base">
                     Find specialists and book appointments based on your needs.
                   </CardDescription>
@@ -272,7 +268,7 @@ export default function HomePage() {
                                           <AvatarFallback>{doc.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
                                         </Avatar>
                                         <div className="flex-1 text-center sm:text-left">
-                                          <CardTitle className="text-xl font-semibold text-primary mb-1">{doc.name}</CardTitle>
+                                          <UICardTitle className="text-xl font-semibold text-primary mb-1">{doc.name}</UICardTitle>
                                           <StarRating rating={doc.rating} className="mb-2 justify-center sm:justify-start" />
                                           <Badge variant="outline" className="mb-3">
                                             <Activity className="mr-1.5 h-3.5 w-3.5" />
@@ -327,10 +323,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        <Separator className="my-4" />
+        <Separator className="my-2 sm:my-3" />
 
-        {/* About Us Placeholder Section */}
-        <section className="py-4 sm:py-6 bg-secondary/30">
+        <section className="py-3 sm:py-4 bg-secondary/30">
           <div className="container mx-auto px-4 text-center animate-fade-in">
              <div className="inline-block p-3 bg-primary/10 rounded-full mb-2">
                 <Hospital className="h-10 w-10 text-primary" />
@@ -342,10 +337,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        <Separator className="my-4" />
+        <Separator className="my-2 sm:my-3" />
         
-        {/* Testimonials Placeholder Section */}
-        <section className="py-4 sm:py-6 bg-background">
+        <section className="py-3 sm:py-4 bg-background">
           <div className="container mx-auto px-4 text-center animate-fade-in">
             <div className="inline-block p-3 bg-primary/10 rounded-full mb-2">
                 <MessageSquareHeart className="h-10 w-10 text-primary" />
