@@ -3,7 +3,7 @@
 
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react'; // Added useMemo
 import LoadingSpinner from '@/components/shared/LoadingSpinner';
 import Header from "@/components/shared/Header";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle as UICardTitle } from '@/components/ui/card'; // Renamed CardTitle to avoid conflict
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle as UICardTitle } from '@/components/ui/card'; 
 import { Separator } from '@/components/ui/separator';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -87,7 +87,7 @@ const StarRating = ({ rating, className }: { rating: number, className?: string 
 export default function HomePage() {
   const { user, role, loading } = useAuth();
   const router = useRouter();
-  const { replace, push } = router;
+  const { replace, push } = router; // Destructure for useEffect dependency array
   const [selectedSpecialization, setSelectedSpecialization] = useState<string>("");
   const [recommendedDoctors, setRecommendedDoctors] = useState<Doctor[]>([]);
   const [isDoctorDialogClientReady, setIsDoctorDialogClientReady] = useState(false);
@@ -257,7 +257,7 @@ export default function HomePage() {
                           )}
 
                           {recommendedDoctors.length > 0 && (
-                            <div className="space-y-4">
+                            <div className="space-y-4"> {/* Removed ScrollArea from here */}
                               <h3 className="text-lg font-semibold text-center text-primary">Recommended Doctors for {selectedSpecialization}</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   {recommendedDoctors.map(doc => (
@@ -369,5 +369,4 @@ export default function HomePage() {
     </div>
   );
 }
-
     
